@@ -1,18 +1,14 @@
+// Updated by trungquandev.com's author on May 13 2023
+// Sample Eslint config for React project
 module.exports = {
   env: { browser: true, es2020: true, node: true },
-  parser: '@babel/eslint-parser',
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    ecmaFeatures: { jsx: true },
-    requireConfigFile: false
-  },
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
     'plugin:react/jsx-runtime',
     'plugin:react-hooks/recommended'
   ],
+  parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
   settings: { react: { version: '18.2' } },
   plugins: [
     'react',
@@ -44,12 +40,6 @@ module.exports = {
     'keyword-spacing': 1,
     'comma-dangle': 1,
     'comma-spacing': 1,
-    'arrow-spacing': 1,
-    "no-restricted-imports": [
-      "error",
-      {
-        "patterns": [{ "regex": "^@mui/[^/]+$" }]
-      }
-    ]
+    'arrow-spacing': 1
   }
 }
