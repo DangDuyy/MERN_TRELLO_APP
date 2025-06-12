@@ -13,7 +13,7 @@ import Typography from '@mui/material/Typography'
 import React from 'react'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
-export default function WorkSpaces() {
+export default function Templates() {
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
   const handleClick = (event) => {
@@ -26,23 +26,23 @@ export default function WorkSpaces() {
   return (
     <Box>
       <Button
-        id="basic-button-workspaces"
-        aria-controls={open ? 'basic-menu-workspaces' : undefined}
+        id="basic-button-templates"
+        aria-controls={open ? 'basic-menu-templates' : undefined}
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
         endIcon={<ExpandMoreIcon/>}
       >
-        Workspace
+        Templates
       </Button>
       <Menu
-        id="basic-menu-workspaces"
+        id="basic-menu-templates"
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
         slotProps={{
           list: {
-            'aria-labelledby': 'basic-button-workspaces'
+            'aria-labelledby': 'basic-button-templates'
           }
         }}
       >
