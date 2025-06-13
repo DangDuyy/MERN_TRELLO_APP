@@ -1,31 +1,31 @@
-import { useColorScheme } from '@mui/material/styles';
+import { useColorScheme, useTheme } from '@mui/material/styles'
+import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
+import Select from '@mui/material/Select'
+import MenuItem from '@mui/material/MenuItem'
 
 function ModeSelect() {
-  const { mode, setMode } = useColorScheme();
+  const { mode, setMode } = useColorScheme()
+  const theme = useTheme()
 
-  if (!mode) return null;
+  if (!mode) return null
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-      <div>
-        Mode: 
-        <select
-          value={mode}
-          onChange={(e) => setMode(e.target.value)}
-          style={{ 
-            marginLeft: '8px',
-            padding: '4px 8px',
-            borderRadius: '4px',
-            border: '1px solid #ccc'
-          }}
-        >
-          <option value="system">System</option>
-          <option value="light">Light</option>
-          <option value="dark">Dark</option>
-        </select>
-      </div>
-    </div>
-  );
+    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+      <Typography variant="body2" color="primary">
+        Mode:
+      </Typography>
+      <Select
+        size="small"
+        value={mode}
+        onChange={e => setMode(e.target.value)}
+      >
+        <MenuItem value="system">System</MenuItem>
+        <MenuItem value="light">Light</MenuItem>
+        <MenuItem value="dark">Dark</MenuItem>
+      </Select>
+    </Box>
+  )
 }
 
-export default ModeSelect;
+export default ModeSelect
