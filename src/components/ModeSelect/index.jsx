@@ -12,13 +12,20 @@ function ModeSelect() {
 
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-      <Typography variant="body2" color="primary">
+      <Typography variant="body2" sx={{ color: 'white' }}>
         Mode:
       </Typography>
       <Select
         size="small"
         value={mode}
         onChange={e => setMode(e.target.value)}
+        sx={{
+          color: 'white',
+          '.MuiOutlinedInput-notchedOutline': {borderColor: 'white' },
+          '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'white' },
+          '&:Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: 'white' },
+          '.MuiSvgIcon-root': { color: 'white' }
+        }}
       >
         <MenuItem value="system">System</MenuItem>
         <MenuItem value="light">Light</MenuItem>

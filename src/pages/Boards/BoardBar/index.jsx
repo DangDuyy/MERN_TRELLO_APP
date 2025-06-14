@@ -12,13 +12,13 @@ import Button from '@mui/material/Button'
 import PersonAddIcon from '@mui/icons-material/PersonAdd'
 
 const MENU_STYLES = {
-  color:'primary.main',
-  backgroundColor: 'white',
+  color:'white',
+  backgroundColor: 'transparent',
   border: 'none',
   paddingX: '5px',
   borderRadius: '4px',
   '& .MuiSvgIcon-root':{
-    color: 'primary.main'
+    color: 'white'
   }
 }
 function BoardBar() {
@@ -29,11 +29,11 @@ function BoardBar() {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
-      backgroundColor: (theme) => theme.palette.background.paper,
+      backgroundColor: (theme) => (theme.palette.mode === 'dark' ? '#34495e' : '#1976d2' ),
       gap:2,
       paddingX: 2,
       overflowX: 'auto',
-      borderTop: '1px solid'
+      borderBottom: '1px solid'
     }}>
       <Box sx={{ display: 'flex', alignItems:'center', gap:2 }}>
         <Chip
@@ -63,15 +63,26 @@ function BoardBar() {
         </Chip>
       </Box>
       <Box sx={{ display: 'flex', alignItems:'center', gap:2 }}>
-        <Button variant="outlined" startIcon={<PersonAddIcon/>} >
+        <Button
+          variant="outlined"
+          sx={{ 
+            color: 'white',
+            borderColor:'white',
+            '&:hover': {
+              borderColor: 'white'
+            }
+          }}
+          startIcon={<PersonAddIcon/>} >
           Invite
         </Button>
         <AvatarGroup max={4}
           sx={{
+            gap: '10px',
             '& .MuiAvatar-root' : {
               width: 32,
               height: 32,
-              fontSize: 16
+              fontSize: 16,
+              border: 'none'
             }
           }}>
           <Tooltip title="dangduydev" alt="dangduydev">
