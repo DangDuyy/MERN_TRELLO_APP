@@ -26,7 +26,9 @@ function AppBar() {
       height: (theme) => theme.trello.appBarHeight, // Đổi sang custom
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'space-between'
+      justifyContent: 'space-between',
+      gap:2,
+      overflowX: 'auto'
     }}>
       <Box sx={{ display: 'flex', alignItems:'center', gap:2 }}>
         <AppsIcon sx={{ color:'primary.main' }}/>
@@ -34,15 +36,17 @@ function AppBar() {
           <SvgIcon component={TrelloIcon} fontSize='small' inheritViewBox sx={{ color: 'primary.main' }}/>
           <Typography variant='span'sx={{ fontSize:'1rem', fontWeight:'bold', color:'primary.main' }}>Trello</Typography>
         </Box>
-        <WorkSpaces/>
-        <Recent/>
-        <Starred/>
-        <Templates/>
-        <Button variant="outlined">CREATE</Button>
+        <Box sx={{ display: { xs:'none', md:'flex' }, gap:1 }}>
+          <WorkSpaces/>
+          <Recent/>
+          <Starred/>
+          <Templates/>
+          <Button variant="outlined">CREATE</Button>
+        </Box>
       </Box>
       <Box sx={{ display: 'flex', alignItems:'center', gap:2 }}>
-        <TextField id="outlined-search" label="Search..." type="search" size="small"/>
-        <ModeSelect/>
+        <TextField id="outlined-search" label="Search..." type="search" size="small" sx={{ minWidth: 120 }} />
+        <ModeSelect sx={{ minWidth: 120 }} />
         <Tooltip title="Notifications">
           <Badge color="secondary" variant="dot" >
             <NotificationsNoneIcon sx={{ color: 'primary.main' }} />
