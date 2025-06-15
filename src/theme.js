@@ -1,10 +1,23 @@
 // import { cyan, deepOrange, orange, teal } from '@mui/material/colors'
 import { experimental_extendTheme as extendTheme } from '@mui/material/styles'
 
+const APP_BAR_HEIGHT = '58px'
+const BOARD_BAR_HEIGHT = '48px'
+const BOARD_CONTENT_HEIGHT = `calc(100vh - ${APP_BAR_HEIGHT} - ${BOARD_BAR_HEIGHT})`
 // Create a theme instance.
 const theme = extendTheme({
   components: {
     // Name of the component
+    MuiTypography: {
+      styleOverrides: {
+        root: {
+          // Các thuộc tính chung cho mọi Typography
+        },
+        body1: {
+          fontSize: '0.875rem'
+        }
+      }
+    },
     MuiButton: {
       styleOverrides: {
         // Name of the slot
@@ -21,15 +34,15 @@ const theme = extendTheme({
     MuiInputLabel: {
       styleOverrides: {
         // Name of the slot
-        root: ({theme}) => ({
+        root: {
           // color: theme.palette.primary.main
-        })
+        }
       }
     },
     MuiOutlinedInput: {
       styleOverrides: {
         // Name of the slot
-        root: ({theme}) => ({
+        root: {
           // color: theme.palette.primary.main,
           fontSize: '0.875rem',
           // '.MuiOutlinedInput-notchedOutline': {
@@ -49,7 +62,7 @@ const theme = extendTheme({
           '&.Mui-focused fieldset': {
             borderWidth: '1px !important'
           }
-        })
+        }
       }
     },
     //custom thanh scrollbar
@@ -57,8 +70,8 @@ const theme = extendTheme({
       styleOverrides: {
         body: {
           '*::-webkit-scrollbar ': {
-            width: '4px',
-            height : '4px'
+            width: '8px',
+            height : '8px'
           },
           '*::-webkit-scrollbar-thumb ': {
             backgroundColor : '#dcdde1',
@@ -72,8 +85,9 @@ const theme = extendTheme({
     }
   },
   trello: {
-    appBarHeight: '58px',
-    boardBarHeight: '60px'
+    appBarHeight: APP_BAR_HEIGHT,
+    boardBarHeight: BOARD_BAR_HEIGHT,
+    boardContentHeight: BOARD_CONTENT_HEIGHT
   },
   colorSchemes:{
     // light: {

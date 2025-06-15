@@ -82,7 +82,10 @@ function BoardBar() {
               width: 32,
               height: 32,
               fontSize: 16,
-              border: 'none'
+              border: 'none',
+              color:'white',
+              cursor: 'poiter',
+              '&:first-of-type': { bgcolor: '#a4b0be' }
             }
           }}>
           <Tooltip title="dangduydev" alt="dangduydev">
