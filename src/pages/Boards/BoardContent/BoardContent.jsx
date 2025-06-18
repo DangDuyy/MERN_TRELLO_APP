@@ -1,11 +1,21 @@
-import { DndContext } from '@dnd-kit/core'
+import { DndContext, PointerSensor, MouseSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core'
 import { arrayMove } from '@dnd-kit/sortable'
 import Box from '@mui/material/Box'
 import { useEffect, useState } from 'react'
 import { mapOrder } from '~/utils/sorts'
 import ListColumns from './ListColumns/ListColumns'
 
-function BoardContent({board}) {
+function BoardContent({ board }) {
+  //nếu dùng pointer sensor phải kết hợp với thuộc tính css touch-action: none ở những phần tử kéo thả - nhưng mà còn bug
+  //chỉ khi kéo thả mới bắt sự kiện còn click chuột thì không
+  // const pointerSensor = useSensor(PointerSensor, { activationConstraint: { distance: 10 } })
+
+  const mouseSensor = useSensor(MouseSensor, { activationConstraint: { distance: 10 } })
+
+  const touchSensor  = useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance:5 } })
+
+  const mySensors = useSensors(mouseSensor, touchSensor )
+
   const [orderedColumnState, setOrderedColumnState] = useState([])
 
   useEffect(() => {
@@ -36,7 +46,7 @@ function BoardContent({board}) {
   }
 
   return (
-    <DndContext onDragEnd={handleDragEnd}>
+    <DndContext onDragEnd={handleDragEnd} sensors={mySensors}>
       <Box sx={{
         width:'100%',
         height: (theme) => theme.trello.boardContentHeight,

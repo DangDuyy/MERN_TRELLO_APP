@@ -15,12 +15,13 @@ import { useState } from 'react'
 import ListCard from './ListCards/ListCard'
 import { mapOrder } from '~/utils/sorts'
 import {useSortable} from '@dnd-kit/sortable'
-import {CSS} from '@dnd-kit/utilities'
+import { CSS } from '@dnd-kit/utilities'
 
 function Column({ column }) {
   //sortable context
-  const { attributes, listeners, setNodeRef, transform,transition} = useSortable({ id: column._id, data: {...column} })
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: column._id, data: { ...column } })
   const dndKitColumnStyles = {
+    touchAction: 'none',
     transform: CSS.Translate.toString(transform),
     transition
   }
