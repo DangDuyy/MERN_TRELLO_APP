@@ -6,18 +6,32 @@ import MuiCard from '@mui/material/Card'
 import CardActions from '@mui/material/CardActions'
 import CardContent from '@mui/material/CardContent'
 import CardMedia from '@mui/material/CardMedia'
+import {useSortable} from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
 
 function Card( { card }) {
 
   const shouldShowCardAction = () => {
     return !!card?.memberIds?.length || !!card?.comments?.length || !!card?.attachments?.length
   }
+
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: card._id, data: { ...card } })
+  const dndKitCardStyles = {
+    //touchaction: 'none dánh cho dạng sensor default là pointer
+    touchAction: 'none',
+    //tranlate để css không bị strech ra
+    transform: CSS.Translate.toString(transform),
+    transition
+  }
+
   return (
-    <MuiCard sx={{
-      cursor: 'pointer',
-      boxShadow: '0 1px 1px rbga(0, 0, 0, 0.2)',
-      overflow: 'unset'
-    }}>
+    <MuiCard
+      ref={setNodeRef} style={dndKitCardStyles} {...attributes} {...listeners}
+      sx={{
+        cursor: 'pointer',
+        boxShadow: '0 1px 1px rbga(0, 0, 0, 0.2)',
+        overflow: 'unset'
+      }}>
       {card?.cover &&
       <CardMedia
         sx={{ height: 140 }}
