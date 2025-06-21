@@ -84,10 +84,10 @@ function BoardContent({ board }) {
         nextOverColumn.cards = nextOverColumn.cards.filter(card => card._id !== activeDraggingCardId)
 
         //đối với trường hợp dragend thì phải cập nhật lại chuẩn dữ liệu columnId trong card sau khi kéo card ở 2 column khác nhau
-        const rebuild_activeDraggingCard = {
-          ...activeDraggingCardData,
-          columnId: nextOverColumn
-        }
+        // const rebuild_activeDraggingCard = {
+        //   ...activeDraggingCardData,
+        //   columnId: nextOverColumn
+        // }
 
         // console.log('rebuild_activeDraggingCard ',rebuild_activeDraggingCard)
         //tiep theo la them cai card dang keo vao overcolumn

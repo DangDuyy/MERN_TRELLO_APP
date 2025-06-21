@@ -22,7 +22,7 @@ const MENU_STYLES = {
     color: 'white'
   }
 }
-function BoardBar({board}) {
+function BoardBar({ board }) {
   return (
     <Box px={2} sx={{
       width:'100%',

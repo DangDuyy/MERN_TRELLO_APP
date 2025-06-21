@@ -14,7 +14,7 @@ import MenuItem from '@mui/material/MenuItem'
 import { useState } from 'react'
 import ListCard from './ListCards/ListCard'
 import { mapOrder } from '~/utils/sorts'
-import {useSortable} from '@dnd-kit/sortable'
+import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 
 function Column({ column }) {
