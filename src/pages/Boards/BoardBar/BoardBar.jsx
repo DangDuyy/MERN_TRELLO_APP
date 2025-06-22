@@ -66,7 +66,7 @@ function BoardBar({ board }) {
       <Box sx={{ display: 'flex', alignItems:'center', gap:2 }}>
         <Button
           variant="outlined"
-          sx={{ 
+          sx={{
             color: 'white',
             borderColor:'white',
             '&:hover': {
