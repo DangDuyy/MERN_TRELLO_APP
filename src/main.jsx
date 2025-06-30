@@ -6,10 +6,8 @@ import App from '~/App.jsx'
 import theme from '~/theme.js' // Thêm dòng này
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <CssVarsProvider theme={theme}> {/* Truyền theme vào đây */}
-      <CssBaseline />
-      <App />
-    </CssVarsProvider>
-  </React.StrictMode>,
+  <CssVarsProvider theme={theme}> {/* Truyền theme vào đây */}
+    <CssBaseline />
+    <App />
+  </CssVarsProvider>
 )

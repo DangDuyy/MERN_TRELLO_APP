@@ -1,5 +1,5 @@
 // Boards List
-import {useState} from 'react'
+import { useState } from 'react'
 import AppsIcon from '@mui/icons-material/Apps'
 import Box from '@mui/material/Box'
 import { ReactComponent as TrelloIcon } from '~/assets/trello.svg'
@@ -66,10 +66,12 @@ function AppBar() {
               </InputAdornment>
             ),
             endAdornment: (
+              <InputAdornment position="end">
+                <CloseIcon sx={{ color: searchValue ? 'white' : 'transparent', cursor:'pointer' }}
+                  onClick={() => setSearchValue('')}
+                  fontSize='small'/>
+              </InputAdornment>
               //kiem tra searchValue neu co gia tri thi cho mau trang con khong thi trong suot
-              <CloseIcon sx={{ color: searchValue ? 'white' : 'transparent', cursor:'pointer' }}
-                onClick={() => setSearchValue('')}
-                fontSize='small'/>
             )
           }}
           sx={{
