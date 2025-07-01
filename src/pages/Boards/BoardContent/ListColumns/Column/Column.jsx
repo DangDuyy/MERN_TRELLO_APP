@@ -20,7 +20,7 @@ import TextField from '@mui/material/TextField'
 import CloseIcon from '@mui/icons-material/Close'
 import { toast } from 'react-toastify'
 
-function Column({ column }) {
+function Column({ column, createNewCard }) {
   //sortable context
   //isDraging là trong khi kéo thả
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: column._id, data: { ...column } })
@@ -42,11 +42,20 @@ function Column({ column }) {
   const [openNewCardForm, setOpenNewCardForm] = useState(false)
   const toogleOpenNewCardForm = () => setOpenNewCardForm(!openNewCardForm)
   const [newCardTitle, setNewCardTitle] = useState('')
-  const addNewCard = () => {
+  const addNewCard = async () => {
     if (!newCardTitle) {
-      toast.error('Plese enter card title!', { position: 'bottom-right'})
+      toast.error('Plese enter card title!', { position: 'bottom-right' })
       return
     }
+
+    //tao du lieu column de goi API
+    const newCardData = {
+      title: newCardTitle,
+      columnId: column._id
+    }
+    //vi chua co redux, nen truyen props createNewColumn sang BoardContent -> ListColumns, sau do co gia tri thi se rerender nguoc lai len _id
+    await createNewCard(newCardData)
+
     toogleOpenNewCardForm()
     setNewCardTitle('')
     // console.log('newColumnTitle ', newColumnTitle )

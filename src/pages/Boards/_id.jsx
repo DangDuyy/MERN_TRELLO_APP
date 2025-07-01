@@ -5,10 +5,9 @@ import BoardBar from './BoardBar/BoardBar'
 import BoardContent from './BoardContent/BoardContent'
 // import { mockData } from '~/apis/mock-data'
 import { useState, useEffect } from 'react'
-import { fetchBoardDetailsAPI } from '~/apis'
+import { fetchBoardDetailsAPI, createNewColumnAPI, createNewCardAPI } from '~/apis'
 function Board() {
   const [board, setBoard] = useState(null)
-
 
   //goi API bang useEffect
   useEffect(() => {
@@ -17,11 +16,30 @@ function Board() {
       setBoard(board)
     })
   }, [])
+
+  //function co chuc nang rerender lai cac column va card khi them moi
+  //vi chua co redux, nen truyen props createNewColumn sang BoardContent -> ListColumns, sau do co gia tri thi se rerender nguoc lai len _id
+  const createNewColumn = async (newColumnData) => {
+    const createColumn = await createNewColumnAPI({
+      ...newColumnData,
+      boardId: board._id
+    })
+    console.log(createColumn)
+    //cap nhat lai state board
+  }
+  const createNewCard = async (newCardData) => {
+    const createCard = await createNewCardAPI({
+      ...newCardData,
+      boardId: board._id
+    })
+    console.log(createCard)
+    //cap nhat lai state board
+  }
   return (
     <Container disableGutters maxWidth={false} sx={{ height: '100vh', backgroundColor:'primary.main' }}>
       <AppBar />
-      <BoardBar board={board}/>
-      <BoardContent board={board}/>
+      <BoardBar board={board} />
+      <BoardContent board={board} createNewColumn={createNewColumn} createNewCard={createNewCard}/>
     </Container>
   )
 }
