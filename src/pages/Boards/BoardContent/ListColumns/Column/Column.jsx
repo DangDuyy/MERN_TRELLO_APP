@@ -18,6 +18,7 @@ import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import TextField from '@mui/material/TextField'
 import CloseIcon from '@mui/icons-material/Close'
+import { toast } from 'react-toastify'
 
 function Column({ column }) {
   //sortable context
@@ -43,7 +44,7 @@ function Column({ column }) {
   const [newCardTitle, setNewCardTitle] = useState('')
   const addNewCard = () => {
     if (!newCardTitle) {
-      // console.error('Plese enter column title!')
+      toast.error('Plese enter card title!', { position: 'bottom-right'})
       return
     }
     toogleOpenNewCardForm()
@@ -173,7 +174,7 @@ function Column({ column }) {
                 sx={{
                   '& label': { color: 'text.primary' },
                   '& label.Mui-focused': { color: theme => theme.palette.primary.main },
-                  '& input': { 
+                  '& input': {
                     color: (theme) => theme.palette.primary.main,
                     bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#333463' : 'white')
                   },
