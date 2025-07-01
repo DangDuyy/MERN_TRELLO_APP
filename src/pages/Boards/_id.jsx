@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 // Board Details
 import Container from '@mui/material/Container'
 import AppBar from '~/components/AppBoard/AppBoard'
@@ -24,15 +25,29 @@ function Board() {
       ...newColumnData,
       boardId: board._id
     })
-    console.log(createColumn)
+    // console.log(createColumn)
     //cap nhat lai state board
+
+    const newBoard = { ...board }
+    newBoard.columns.push(createColumn)
+    newBoard.columnOrderIds.push(createColumn._id)
+    setBoard(newBoard)
   }
   const createNewCard = async (newCardData) => {
     const createCard = await createNewCardAPI({
       ...newCardData,
       boardId: board._id
     })
-    console.log(createCard)
+    //card kho hon vi "phu thuoc vao column" thay vi truc tiep vao board
+    const newBoard = { ...board }
+    //tim ra column chua chinh cai card vua duoc tao
+    const columnToUpdate = newBoard.columns.find( column => column._id === createCard.columnId )
+    if (columnToUpdate) {
+      columnToUpdate.cards.push(createCard)
+      columnToUpdate.cardOrderIds.push(createCard._id)
+    }
+    setBoard(newBoard)
+    // console.log(createCard)
     //cap nhat lai state board
   }
   return (
