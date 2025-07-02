@@ -7,7 +7,7 @@ import BoardContent from './BoardContent/BoardContent'
 // import { mockData } from '~/apis/mock-data'
 import { useState, useEffect } from 'react'
 import { mapOrder } from '~/utils/sorts'
-import { fetchBoardDetailsAPI, createNewColumnAPI, createNewCardAPI, updateBoardDetailsAPI, updateColumnDetailsAPI } from '~/apis'
+import { fetchBoardDetailsAPI, createNewColumnAPI, createNewCardAPI, updateBoardDetailsAPI, updateColumnDetailsAPI, moveCardToDifferentColumnAPI } from '~/apis'
 import { Box } from '@mui/material'
 function Board() {
   const [board, setBoard] = useState(null)
@@ -79,17 +79,47 @@ function Board() {
     setBoard(newBoard)
     updateColumnDetailsAPI(columnId, { cardOrderIds:dndOrderedCardIds })
   }
+
+  const moveCardToDifferentColumn = (currentCardId, prevColumnId, nextColumnId, dndOrderedColumn) => {
+    const dndOrderedColumnIds = dndOrderedColumn.map( c => c._id)
+    const newBoard = { ...board }
+    newBoard.columns = dndOrderedColumn
+    newBoard.columnOrderIds = dndOrderedColumnIds
+
+    setBoard(newBoard)
+    //goi API xu ly backend
+    const prevColumn = dndOrderedColumn.find(c => c._id === prevColumnId)
+    const nextColumn = dndOrderedColumn.find(c => c._id === nextColumnId)
+    const apiData = {
+      currentCardId,
+      prevColumnId,
+      prevCardOrderIds: prevColumn?.cardOrderIds || [],
+      nextColumnId,
+      nextCardOrderIds: nextColumn?.cardOrderIds || []
+    }
+    console.log('Sending moveCardToDifferentColumn API data:', apiData)
+    console.log('prevColumn:', prevColumn)
+    console.log('nextColumn:', nextColumn)
+    moveCardToDifferentColumnAPI(apiData)
+  }
+
   if (!board) {
     return (
       <Box>Loading...</Box>
     )
   }
+
   return (
     <Container disableGutters maxWidth={false} sx={{ height: '100vh', backgroundColor:'primary.main' }}>
       <AppBar />
       <BoardBar board={board} />
-      <BoardContent board={board} createNewColumn={createNewColumn} createNewCard={createNewCard} moveColumns={moveColumns}
-        moveCardInTheSameColumn={moveCardInTheSameColumn}/>
+      <BoardContent
+        board={board}
+        createNewColumn={createNewColumn}
+        createNewCard={createNewCard}
+        moveColumns={moveColumns}
+        moveCardInTheSameColumn={moveCardInTheSameColumn}
+        moveCardToDifferentColumn={moveCardToDifferentColumn}/>
     </Container>
   )
 }

@@ -13,7 +13,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
 }
 
-function BoardContent({ board, createNewColumn, createNewCard, moveColumns, moveCardInTheSameColumn }) {
+function BoardContent({ board, createNewColumn, createNewCard, moveColumns, moveCardInTheSameColumn, moveCardToDifferentColumn }) {
   //nếu dùng pointer sensor phải kết hợp với thuộc tính css touch-action: none ở những phần tử kéo thả - nhưng mà còn bug
   //chỉ khi kéo thả mới bắt sự kiện còn click chuột thì không
   // const pointerSensor = useSensor(PointerSensor, { activationConstraint: { distance: 10 } })
@@ -51,7 +51,8 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumns, move
     over,
     activeColumn,
     activeDraggingCardId,
-    activeDraggingCardData
+    activeDraggingCardData,
+    triggerForm
   ) => {
     setOrderedColumnState(prevColumn => {
       //tim vi tris cua thz overCard, noi ma active card sap duoc tha
@@ -101,6 +102,14 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumns, move
         nextOverColumn.cardOrderIds = nextOverColumn.cards.map(card => card._id)
       }
 
+      if (triggerForm === 'handleDragEnd') {
+        moveCardToDifferentColumn(
+          activeDraggingCardId,
+          oldColumnWhenDraggingCard._id,
+          nextOverColumn._id,
+          nextColumns
+        )
+      }
       // console.log('nextColumns ', nextColumns)
       return nextColumns
     })
@@ -149,7 +158,7 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumns, move
 
     //2 column khac nhau moi xu ly dong nay
     if (activeColumn._id !== overColumn._id) {
-      moveCardBetweenDifferentColumns(overColumn, overCardId, active, over, activeColumn, activeDraggingCardId, activeDraggingCardData)
+      moveCardBetweenDifferentColumns(overColumn, overCardId, active, over, activeColumn, activeDraggingCardId, activeDraggingCardData, 'handleDragOver')
     }
   }
 
@@ -185,7 +194,7 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumns, move
       // console.log('over Column ', overColumn )
       //2 column khac nhau moi xu ly dong nay
       if (oldColumnWhenDraggingCard._id !== overColumn._id) {
-        moveCardBetweenDifferentColumns(overColumn, overCardId, active, over, activeColumn, activeDraggingCardId, activeDraggingCardData)}
+        moveCardBetweenDifferentColumns(overColumn, overCardId, active, over, activeColumn, activeDraggingCardId, activeDraggingCardData, 'handleDragEnd')}
       else
       {
         //hanh dong keo tha card trong cung 1 cai column
@@ -302,6 +311,7 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumns, move
     // If there are no collisions with the pointer, return rectangle intersections
     // return rectIntersection(args)
   }, [activeDragItemType])
+
 
   return (
     <DndContext
