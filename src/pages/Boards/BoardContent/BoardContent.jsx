@@ -13,7 +13,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
 }
 
-function BoardContent({ board, createNewColumn, createNewCard }) {
+function BoardContent({ board, createNewColumn, createNewCard, moveColumns, moveCardInTheSameColumn }) {
   //nếu dùng pointer sensor phải kết hợp với thuộc tính css touch-action: none ở những phần tử kéo thả - nhưng mà còn bug
   //chỉ khi kéo thả mới bắt sự kiện còn click chuột thì không
   // const pointerSensor = useSensor(PointerSensor, { activationConstraint: { distance: 10 } })
@@ -40,7 +40,7 @@ function BoardContent({ board, createNewColumn, createNewCard }) {
   }
 
   useEffect(() => {
-    setOrderedColumnState(mapOrder(board?.columns, board?.columnOrderIds, '_id'))
+    setOrderedColumnState(board.columns)
   }, [board])
 
   //cập nhật lại state trong trường hợp di chuyển card giữa các column khác nhau
@@ -197,6 +197,7 @@ function BoardContent({ board, createNewColumn, createNewCard }) {
           newColumnIndex = oldColumnWhenDraggingCard?.cards?.length - 1 // hoặc .length nếu muốn về cuối
         }
         const dndOrderedCards = arrayMove(oldColumnWhenDraggingCard?.cards, oldColumnIndex, newColumnIndex)
+        const dndOrderedCardIds = dndOrderedCards.map(card => card._id)
         // const dndOrderedColumnIds = dndOrderedColumn.map( c => c._id)
         // console.log('dndOrderedColumn', dndOrderedColumn)
 
@@ -211,9 +212,12 @@ function BoardContent({ board, createNewColumn, createNewCard }) {
           // console.log('tagetColumn ', targetColumn )
 
           targetColumn.cards = dndOrderedCards
-          targetColumn.cardOrderIds = dndOrderedCards.map(card => card._id)
+          targetColumn.cardOrderIds = dndOrderedCardIds
+
           return nextColumns
         })
+
+        moveCardInTheSameColumn(dndOrderedCards, dndOrderedCardIds, oldColumnWhenDraggingCard._id)
       }
     }
 
@@ -233,6 +237,7 @@ function BoardContent({ board, createNewColumn, createNewCard }) {
 
         //cập nhật statecolumn ban đàu sau khi kéo thả
         setOrderedColumnState(dndOrderedColumn)
+        moveColumns(dndOrderedColumn)
       }
     }
 

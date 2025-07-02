@@ -6,7 +6,9 @@ import BoardBar from './BoardBar/BoardBar'
 import BoardContent from './BoardContent/BoardContent'
 // import { mockData } from '~/apis/mock-data'
 import { useState, useEffect } from 'react'
-import { fetchBoardDetailsAPI, createNewColumnAPI, createNewCardAPI } from '~/apis'
+import { mapOrder } from '~/utils/sorts'
+import { fetchBoardDetailsAPI, createNewColumnAPI, createNewCardAPI, updateBoardDetailsAPI, updateColumnDetailsAPI } from '~/apis'
+import { Box } from '@mui/material'
 function Board() {
   const [board, setBoard] = useState(null)
 
@@ -14,6 +16,11 @@ function Board() {
   useEffect(() => {
     const boardId = '6861f8ec46d5cb5cdb103bb9'
     fetchBoardDetailsAPI(boardId).then(board => {
+
+      board.columns = mapOrder(board.columns, board.columnOrderIds, '_id')
+      board.columns.forEach((column) => {
+        column.cards = mapOrder(column.cards, column.cardOrderIds, '_id')
+      })
       setBoard(board)
     })
   }, [])
@@ -50,11 +57,39 @@ function Board() {
     // console.log(createCard)
     //cap nhat lai state board
   }
+  //goi API khi keo tha column xong xuoi, cap nhat lai giao dien cac board
+  const moveColumns = (dndOrderedColumn) => {
+    const dndOrderedColumnIds = dndOrderedColumn.map( c => c._id)
+    const newBoard = { ...board }
+    newBoard.columns = dndOrderedColumn
+    newBoard.columnOrderIds = dndOrderedColumnIds
+
+    setBoard(newBoard)
+    //goi API update board
+    updateBoardDetailsAPI(newBoard._id, { columnOrderIds: newBoard.columnOrderIds })
+  }
+
+  const moveCardInTheSameColumn = (dndOrderedCards, dndOrderedCardIds, columnId) => {
+    const newBoard = { ...board }
+    const columnToUpdate = newBoard.columns.find( column => column._id === columnId )
+    if (columnToUpdate) {
+      columnToUpdate.cards = dndOrderedCards
+      columnToUpdate.cardOrderIds = dndOrderedCardIds
+    }
+    setBoard(newBoard)
+    updateColumnDetailsAPI(columnId, { cardOrderIds:dndOrderedCardIds })
+  }
+  if (!board) {
+    return (
+      <Box>Loading...</Box>
+    )
+  }
   return (
     <Container disableGutters maxWidth={false} sx={{ height: '100vh', backgroundColor:'primary.main' }}>
       <AppBar />
       <BoardBar board={board} />
-      <BoardContent board={board} createNewColumn={createNewColumn} createNewCard={createNewCard}/>
+      <BoardContent board={board} createNewColumn={createNewColumn} createNewCard={createNewCard} moveColumns={moveColumns}
+        moveCardInTheSameColumn={moveCardInTheSameColumn}/>
     </Container>
   )
 }

@@ -37,12 +37,12 @@ function Column({ column, createNewCard }) {
   const open = Boolean(anchorEl)
   const handleClick = (event) => setAnchorEl(event.currentTarget)
   const handleClose = () => setAnchorEl(null)
-  const orderedCard = mapOrder(column?.cards, column?.cardOrderIds, '_id')
+  const orderedCard = column.cards
 
   const [openNewCardForm, setOpenNewCardForm] = useState(false)
   const toogleOpenNewCardForm = () => setOpenNewCardForm(!openNewCardForm)
   const [newCardTitle, setNewCardTitle] = useState('')
-  const addNewCard = async () => {
+  const addNewCard = () => {
     if (!newCardTitle) {
       toast.error('Plese enter card title!', { position: 'bottom-right' })
       return
@@ -54,7 +54,7 @@ function Column({ column, createNewCard }) {
       columnId: column._id
     }
     //vi chua co redux, nen truyen props createNewColumn sang BoardContent -> ListColumns, sau do co gia tri thi se rerender nguoc lai len _id
-    await createNewCard(newCardData)
+    createNewCard(newCardData)
 
     toogleOpenNewCardForm()
     setNewCardTitle('')
