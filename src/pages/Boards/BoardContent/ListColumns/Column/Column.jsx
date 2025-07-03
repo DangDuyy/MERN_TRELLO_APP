@@ -1,5 +1,8 @@
+import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
 import { ContentCopy, ContentPaste } from '@mui/icons-material'
 import AddCardIcon from '@mui/icons-material/AddCard'
+import CloseIcon from '@mui/icons-material/Close'
 import Cloud from '@mui/icons-material/Cloud'
 import ContentCut from '@mui/icons-material/ContentCut'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
@@ -11,16 +14,13 @@ import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
-import { useState } from 'react'
-import ListCard from './ListCards/ListCard'
-import { mapOrder } from '~/utils/sorts'
-import { useSortable } from '@dnd-kit/sortable'
-import { CSS } from '@dnd-kit/utilities'
 import TextField from '@mui/material/TextField'
-import CloseIcon from '@mui/icons-material/Close'
+import { useState } from 'react'
 import { toast } from 'react-toastify'
+import ListCard from './ListCards/ListCard'
+import { useConfirm } from 'material-ui-confirm'
 
-function Column({ column, createNewCard }) {
+function Column({ column, createNewCard, deleteColumnDetails }) {
   //sortable context
   //isDraging là trong khi kéo thả
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: column._id, data: { ...column } })
@@ -60,6 +60,22 @@ function Column({ column, createNewCard }) {
     setNewCardTitle('')
     // console.log('newColumnTitle ', newColumnTitle )
     //goi api o day...
+  }
+
+  const confirmDeteteColumn = useConfirm()
+  //ham de xoa column va cac card ben trong no
+  const handleDeleteColumn = () => {
+    confirmDeteteColumn({
+      title: 'Delete Columns ?',
+      description: 'This action will delete column and its card. Are you sure?',
+      confirmationText: 'Confirm',
+      cancellationText: 'Cancel'
+
+      // confirmationKeyword: 'Delete'
+    }).then(() => {
+      //truyen props deletecolumnDetails xuong tung lop
+      deleteColumnDetails(column._id)
+    }).catch()
   }
   return (
     <div ref={setNodeRef} style={dndKitColumnStyles} {...attributes}>
@@ -106,14 +122,21 @@ function Column({ column, createNewCard }) {
               anchorEl={anchorEl}
               open={open}
               onClose={handleClose}
+              onClick={handleClose}
               slotProps={{
                 list: {
                   'aria-labelledby': 'basic-column-dropdown'
                 }
               }}
             >
-              <MenuItem>
-                <ListItemIcon><AddCardIcon fontSize="small" /></ListItemIcon>
+              <MenuItem
+                sx={{
+                  '&:hover': {
+                    color: 'success.light',
+                    '& .add-card-icon': { color: 'success.light' } }
+                }}
+                onClick={toogleOpenNewCardForm}>
+                <ListItemIcon><AddCardIcon className="add-card-icon" fontSize="small" /></ListItemIcon>
                 <ListItemText>Add new card</ListItemText>
               </MenuItem>
               <MenuItem>
@@ -128,9 +151,15 @@ function Column({ column, createNewCard }) {
                 <ListItemIcon><ContentPaste fontSize="small" /></ListItemIcon>
                 <ListItemText>Paste</ListItemText>
               </MenuItem>
-              <MenuItem>
-                <ListItemIcon><DeleteForeverIcon fontSize="small" /></ListItemIcon>
-                <ListItemText>Remove this column</ListItemText>
+              <MenuItem
+                onClick={handleDeleteColumn}
+                sx={{
+                  '&:hover': {
+                    color: 'warning.dark',
+                    '& .delete-forever-icon': { color: 'warning.dark' } }
+                }}>
+                <ListItemIcon><DeleteForeverIcon className="delete-forever-icon" fontSize="small" /></ListItemIcon>
+                <ListItemText>Delete this column</ListItemText>
               </MenuItem>
               <MenuItem>
                 <ListItemIcon><Cloud fontSize="small" /></ListItemIcon>

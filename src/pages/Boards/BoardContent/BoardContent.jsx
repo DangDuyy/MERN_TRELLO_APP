@@ -1,19 +1,18 @@
-import { defaultDropAnimationSideEffects, DndContext, DragOverlay, useSensor, useSensors, closestCorners, pointerWithin, rectIntersection, getFirstCollision, closestCenter } from '@dnd-kit/core'
+import { closestCenter, closestCorners, defaultDropAnimationSideEffects, DndContext, DragOverlay, getFirstCollision, pointerWithin, rectIntersection, useSensor, useSensors } from '@dnd-kit/core'
 import { arrayMove } from '@dnd-kit/sortable'
 import Box from '@mui/material/Box'
-import { useEffect, useState, useCallback, useRef } from 'react'
-import { mapOrder } from '~/utils/sorts'
-import ListColumns from './ListColumns/ListColumns'
-import Card from './ListColumns/Column/ListCards/Card/Card'
-import Column from './ListColumns/Column/Column'
 import { cloneDeep } from 'lodash'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { MouseSensor, TouchSensor } from '~/customLibraries/DndKitSensors'
+import Column from './ListColumns/Column/Column'
+import Card from './ListColumns/Column/ListCards/Card/Card'
+import ListColumns from './ListColumns/ListColumns'
 const ACTIVE_DRAG_ITEM_TYPE = {
   COLUMN: 'ACTIVE_DRAG_ITEM_TYPE_COLUMN',
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
 }
 
-function BoardContent({ board, createNewColumn, createNewCard, moveColumns, moveCardInTheSameColumn, moveCardToDifferentColumn }) {
+function BoardContent({ board, createNewColumn, createNewCard, moveColumns, moveCardInTheSameColumn, moveCardToDifferentColumn, deleteColumnDetails }) {
   //nếu dùng pointer sensor phải kết hợp với thuộc tính css touch-action: none ở những phần tử kéo thả - nhưng mà còn bug
   //chỉ khi kéo thả mới bắt sự kiện còn click chuột thì không
   // const pointerSensor = useSensor(PointerSensor, { activationConstraint: { distance: 10 } })
@@ -331,7 +330,7 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumns, move
         backgroundColor: (theme) => (theme.palette.mode === 'dark' ? '#34495e' : '#1976d2' ),
         p: '10px 0'
       }}>
-        <ListColumns columns={orderedColumnState} createNewColumn={createNewColumn} createNewCard={createNewCard} />
+        <ListColumns columns={orderedColumnState} createNewColumn={createNewColumn} createNewCard={createNewCard} deleteColumnDetails={deleteColumnDetails} />
         <DragOverlay dropAnimation={customDropAnimation}>
           {(!activeDragItemType) && null}
           {(activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.CARD) && <Card card={activeDragItemData} />}

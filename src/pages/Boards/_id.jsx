@@ -7,8 +7,9 @@ import BoardContent from './BoardContent/BoardContent'
 // import { mockData } from '~/apis/mock-data'
 import { useState, useEffect } from 'react'
 import { mapOrder } from '~/utils/sorts'
-import { fetchBoardDetailsAPI, createNewColumnAPI, createNewCardAPI, updateBoardDetailsAPI, updateColumnDetailsAPI, moveCardToDifferentColumnAPI } from '~/apis'
+import { fetchBoardDetailsAPI, createNewColumnAPI, createNewCardAPI, updateBoardDetailsAPI, updateColumnDetailsAPI, moveCardToDifferentColumnAPI, deleteColumnDetailAPI } from '~/apis'
 import { Box } from '@mui/material'
+import { toast } from 'react-toastify'
 function Board() {
   const [board, setBoard] = useState(null)
 
@@ -103,6 +104,18 @@ function Board() {
     moveCardToDifferentColumnAPI(apiData)
   }
 
+  const deleteColumnDetails = (columnId) => {
+    const newBoard = { ...board }
+    newBoard.columns = newBoard.columns.filter( c => c._id !== columnId)
+    newBoard.columnOrderIds = newBoard.columnOrderIds.filter (_id => _id !== columnId)
+
+    setBoard(newBoard)
+
+    //goi api
+    deleteColumnDetailAPI(columnId).then( (res) => {
+      toast.success(res.deleteResult)
+    })
+  }
   if (!board) {
     return (
       <Box>Loading...</Box>
@@ -119,7 +132,8 @@ function Board() {
         createNewCard={createNewCard}
         moveColumns={moveColumns}
         moveCardInTheSameColumn={moveCardInTheSameColumn}
-        moveCardToDifferentColumn={moveCardToDifferentColumn}/>
+        moveCardToDifferentColumn={moveCardToDifferentColumn}
+        deleteColumnDetails={deleteColumnDetails}/>
     </Container>
   )
 }
