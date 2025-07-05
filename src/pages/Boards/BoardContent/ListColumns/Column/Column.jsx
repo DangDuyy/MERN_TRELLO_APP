@@ -19,8 +19,13 @@ import { useState } from 'react'
 import { toast } from 'react-toastify'
 import ListCard from './ListCards/ListCard'
 import { useConfirm } from 'material-ui-confirm'
-
-function Column({ column, createNewCard, deleteColumnDetails }) {
+import { useDispatch, useSelector } from 'react-redux'
+import { selectCurrentActiveBoard, updateCurrentActiveBoard } from '~/redux/activeBoard/activeBoardSlice'
+import { cloneDeep } from 'lodash'
+import { createNewCardAPI, deleteColumnDetailAPI } from '~/apis'
+function Column({ column }) {
+  const dispatch = useDispatch()
+  const board = useSelector(selectCurrentActiveBoard)
   //sortable context
   //isDraging là trong khi kéo thả
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: column._id, data: { ...column } })
@@ -42,7 +47,7 @@ function Column({ column, createNewCard, deleteColumnDetails }) {
   const [openNewCardForm, setOpenNewCardForm] = useState(false)
   const toogleOpenNewCardForm = () => setOpenNewCardForm(!openNewCardForm)
   const [newCardTitle, setNewCardTitle] = useState('')
-  const addNewCard = () => {
+  const addNewCard = async () => {
     if (!newCardTitle) {
       toast.error('Plese enter card title!', { position: 'bottom-right' })
       return
@@ -54,7 +59,24 @@ function Column({ column, createNewCard, deleteColumnDetails }) {
       columnId: column._id
     }
     //vi chua co redux, nen truyen props createNewColumn sang BoardContent -> ListColumns, sau do co gia tri thi se rerender nguoc lai len _id
-    createNewCard(newCardData)
+    // createNewCard(newCardData)
+    const createCard = await createNewCardAPI({
+      ...newCardData,
+      boardId: board._id
+    })
+    //card kho hon vi "phu thuoc vao column" thay vi truc tiep vao board
+    // const newBoard = { ...board }
+    const newBoard = cloneDeep(board)
+    //tim ra column chua chinh cai card vua duoc tao
+    const columnToUpdate = newBoard.columns.find( column => column._id === createCard.columnId )
+    if (columnToUpdate) {
+      columnToUpdate.cards.push(createCard)
+      columnToUpdate.cardOrderIds.push(createCard._id)
+    }
+    // setBoard(newBoard)
+    dispatch(updateCurrentActiveBoard(newBoard))
+    // console.log(createCard)
+    //cap nhat lai state board
 
     toogleOpenNewCardForm()
     setNewCardTitle('')
@@ -74,7 +96,18 @@ function Column({ column, createNewCard, deleteColumnDetails }) {
       // confirmationKeyword: 'Delete'
     }).then(() => {
       //truyen props deletecolumnDetails xuong tung lop
-      deleteColumnDetails(column._id)
+      const newBoard = { ...board }
+      newBoard.columns = newBoard.columns.filter( c => c._id !== column._id)
+      newBoard.columnOrderIds = newBoard.columnOrderIds.filter (_id => _id !== column._id)
+
+      // setBoard(newBoard)
+      dispatch(updateCurrentActiveBoard(newBoard))
+
+
+      //goi api
+      deleteColumnDetailAPI(column._id).then( (res) => {
+        toast.success(res.deleteResult)
+      })
     }).catch()
   }
   return (
