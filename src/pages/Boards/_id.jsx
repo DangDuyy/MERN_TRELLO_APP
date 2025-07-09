@@ -7,27 +7,27 @@ import BoardContent from './BoardContent/BoardContent'
 // import { mockData } from '~/apis/mock-data'
 import { cloneDeep } from 'lodash'
 import { useEffect } from 'react'
-import { createNewCardAPI, deleteColumnDetailAPI, moveCardToDifferentColumnAPI, updateBoardDetailsAPI, updateColumnDetailsAPI } from '~/apis'
+import { moveCardToDifferentColumnAPI, updateBoardDetailsAPI, updateColumnDetailsAPI } from '~/apis'
 import {
   fetchBoardDetailsAPI,
   selectCurrentActiveBoard,
   updateCurrentActiveBoard
 } from '~/redux/activeBoard/activeBoardSlice'
-
 import { Box } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
-import { toast } from 'react-toastify'
+import { useParams } from 'react-router-dom'
 function Board() {
   const dispatch = useDispatch()
   //không dùng state của component và dùng state của redux
   // const [board, setBoard] = useState(null)
   //lay du lieu tu trong redux ra
   const board = useSelector(selectCurrentActiveBoard)
+
+  const { boardId } = useParams()
   //goi API bang useEffect
   useEffect(() => {
-    const boardId = '6861f8ec46d5cb5cdb103bb9'
     dispatch(fetchBoardDetailsAPI(boardId))
-  }, [dispatch])
+  }, [dispatch, boardId])
 
   //function co chuc nang rerender lai cac column va card khi them moi
   //vi chua co redux, nen truyen props createNewColumn sang BoardContent -> ListColumns, sau do co gia tri thi se rerender nguoc lai len _id
