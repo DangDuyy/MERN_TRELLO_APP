@@ -21,70 +21,18 @@ import {
   VisibilityOff,
   Google as GoogleIcon
 } from '@mui/icons-material'
+import { useForm } from 'react-hook-form'
+import { EMAIL_RULE, EMAIL_RULE_MESSAGE, FIELD_REQUIRED_MESSAGE, PASSWORD_RULE, PASSWORD_RULE_MESSAGE } from '~/utils/validators'
+import FieldErrorAlert from '../Form/FieldAlertError'
 function RegisterForm() {
   const navigate = useNavigate()
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    confirmPassword: '',
-    agreeTerms: false
-  })
+  const { register, handleSubmit, formState: { errors }, watch } = useForm()
 
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
-  const [errors, setErrors] = useState({})
 
-  const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }))
-
-    //xoa loi khi nguoi dung bat dau nhap
-    if (errors[name])
-      setErrors( prev => ({
-        ...prev,
-        [name]: ''
-      }))
-  }
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-
-    // Basic validation
-    const newErrors = {}
-
-    if (!formData.email) {
-      newErrors.email = 'Email is required'
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email is invalid'
-    }
-
-    if (!formData.password) {
-      newErrors.password = 'Password is required'
-    } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters'
-    }
-
-    if (!formData.confirmPassword) {
-      newErrors.confirmPassword = 'Please confirm your password'
-    } else if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Passwords do not match'
-    }
-
-    if (!formData.agreeTerms) {
-      newErrors.agreeTerms = 'You must agree to the terms and conditions'
-    }
-
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors)
-      return
-    }
-
-    // TODO: Call register API
-    console.log('Register data:', formData)
-    // navigate('/login') // Navigate to login after successful registration
+  const submitRegister = (e) => {
+    console.log('register data ', e)
   }
 
   return (
@@ -125,17 +73,20 @@ function RegisterForm() {
           </Typography>
         </Box>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit(submitRegister)}>
 
           <TextField
             fullWidth
             name="email"
             type="email"
             label="Email Address"
-            value={formData.email}
-            onChange={handleInputChange}
-            error={!!errors.email}
-            helperText={errors.email}
+            {...register('email', {
+              required: FIELD_REQUIRED_MESSAGE,
+              pattern: {
+                value: EMAIL_RULE,
+                message: EMAIL_RULE_MESSAGE
+              }
+            })}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -145,16 +96,20 @@ function RegisterForm() {
             }}
             sx={{ mb: 2 }}
           />
+          <FieldErrorAlert errors={errors} fieldName={'email'} />
 
           <TextField
             fullWidth
             name="password"
             type={showPassword ? 'text' : 'password'}
             label="Password"
-            value={formData.password}
-            onChange={handleInputChange}
-            error={!!errors.password}
-            helperText={errors.password}
+            {...register('password', {
+              required: FIELD_REQUIRED_MESSAGE,
+              pattern: {
+                value: PASSWORD_RULE,
+                message: PASSWORD_RULE_MESSAGE
+              }
+            })}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -174,16 +129,19 @@ function RegisterForm() {
             }}
             sx={{ mb: 2 }}
           />
-
+          <FieldErrorAlert errors={errors} fieldName={'password'} />
           <TextField
             fullWidth
             name="confirmPassword"
             type={showConfirmPassword ? 'text' : 'password'}
             label="Confirm Password"
-            value={formData.confirmPassword}
-            onChange={handleInputChange}
-            error={!!errors.confirmPassword}
-            helperText={errors.confirmPassword}
+            {...register('confirmPassword', {
+              validate: (value) => {
+                if (value === watch('password'))
+                  return true
+                return 'Password confirmation does not match!'
+              }
+            })}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -204,12 +162,12 @@ function RegisterForm() {
             sx={{ mb: 2 }}
           />
 
+          <FieldErrorAlert errors={errors} fieldName={'confirmPassword'}/>
+
           <FormControlLabel
             control={
               <Checkbox
                 name="agreeTerms"
-                checked={formData.agreeTerms}
-                onChange={handleInputChange}
                 color="primary"
               />
             }

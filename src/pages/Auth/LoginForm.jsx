@@ -1,80 +1,36 @@
 /* eslint-disable no-console */
 /* eslint-disable react/no-unescaped-entities */
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import {
-  Box,
-  TextField,
-  Button,
-  Typography,
-  Paper,
-  InputAdornment,
-  IconButton,
-  Link,
-  Divider
-} from '@mui/material'
 import {
   Email as EmailIcon,
+  Google as GoogleIcon,
   Lock as LockIcon,
   Visibility,
-  VisibilityOff,
-  Google as GoogleIcon
+  VisibilityOff
 } from '@mui/icons-material'
+import {
+  Box,
+  Button,
+  Divider,
+  IconButton,
+  InputAdornment,
+  Link,
+  Paper,
+  TextField,
+  Typography
+} from '@mui/material'
+import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
+import { FIELD_REQUIRED_MESSAGE, EMAIL_RULE, EMAIL_RULE_MESSAGE, PASSWORD_RULE, PASSWORD_RULE_MESSAGE } from '~/utils/validators'
+import FieldErrorAlert from '~/pages/Form/FieldAlertError'
+
 function LoginForm() {
-  const navigate = useNavigate()
-  const [formData, setFormData] = useState({
-    email: '',
-    password: ''
-  })
-
+  const { register, handleSubmit, formState: { errors } } = useForm()
   const [showPassword, setShowPassword] = useState(false)
-  const [errors, setErrors] = useState({})
+  const navigate = useNavigate()
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target
-    setFormData( (prev) => ({
-      ...prev,
-      [name]: value
-    }))
-
-    //xoa error khi nguoi dung bat dau nhap
-    if (errors[name]) {
-      setErrors(prev => ({
-        ...prev,
-        [name]: ''
-      }))
-    }
-  }
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-
-    //basic validation
-    const newErrors = {}
-    if (!formData.email) {
-      newErrors.email = 'Email is required'
-    }
-    else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email is invalid'
-    }
-    if (!formData.password) {
-      newErrors.password = 'Password is required'
-    }
-    else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters'
-    }
-
-    //kiem tra neu ma co loi
-    if (Object.keys(newErrors).length > 0)
-    {
-      setErrors(newErrors)
-      return
-    }
-
-    //goi api o day
-    console.log('Login data: ', formData)
-
-    //navigate khi dang nhap thanh cong
+  const submitLogIn = (data) => {
+    console.log('data ', data)
   }
 
   return (
@@ -115,16 +71,19 @@ function LoginForm() {
           </Typography>
         </Box>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit(submitLogIn)}>
           <TextField
             fullWidth
             name="email"
             type="email"
             label="Email Address"
-            value={formData.email}
-            onChange={handleInputChange}
-            error={!!errors.email}
-            helperText={errors.email}
+            {...register('email', {
+              required: FIELD_REQUIRED_MESSAGE,
+              pattern: {
+                value: EMAIL_RULE,
+                message: EMAIL_RULE_MESSAGE
+              }
+            })}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -132,18 +91,22 @@ function LoginForm() {
                 </InputAdornment>
               )
             }}
-            sx={{ mb: 2 }}
+            sx={{ mb: 1 }}
           />
+          <FieldErrorAlert errors={errors} fieldName={'email'}/>
 
           <TextField
             fullWidth
             name="password"
             type={showPassword ? 'text' : 'password'}
             label="Password"
-            value={formData.password}
-            onChange={handleInputChange}
-            error={!!errors.password}
-            helperText={errors.password}
+            {...register('password', {
+              required: FIELD_REQUIRED_MESSAGE,
+              pattern: {
+                value: PASSWORD_RULE,
+                message: PASSWORD_RULE_MESSAGE
+              }
+            })}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -161,8 +124,9 @@ function LoginForm() {
                 </InputAdornment>
               )
             }}
-            sx={{ mb: 3 }}
+            sx={{ mb: 1 }}
           />
+          <FieldErrorAlert errors={errors} fieldName={'password'}/>
 
           <Button
             type="submit"
@@ -174,7 +138,8 @@ function LoginForm() {
               borderRadius: 2,
               textTransform: 'none',
               fontSize: '1rem',
-              mb: 2
+              mb: 2,
+              mt: 2
             }}
           >
             Sign In
@@ -224,4 +189,5 @@ function LoginForm() {
     </Box>
   )
 }
+
 export default LoginForm
