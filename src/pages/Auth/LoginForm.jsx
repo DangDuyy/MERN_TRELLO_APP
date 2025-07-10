@@ -129,6 +129,7 @@ function LoginForm() {
           <FieldErrorAlert errors={errors} fieldName={'password'}/>
 
           <Button
+            className="interceptor-loading"
             type="submit"
             fullWidth
             variant="contained"

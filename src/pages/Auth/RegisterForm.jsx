@@ -188,6 +188,7 @@ function RegisterForm() {
           )}
 
           <Button
+            className="interceptor-loading"
             type="submit"
             fullWidth
             variant="contained"
