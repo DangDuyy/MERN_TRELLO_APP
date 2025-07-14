@@ -15,12 +15,14 @@ export const interceptorLoadingElements = (calling) => {
   for (let i = 0; i < elements.length; i++) {
     if (calling) {
     // Nếu đang trong thời gian chó gọi API (calling == true) thì sẽ làm mở phần tử và chặn click bằng css-pointer-events
-      elements[i].style.opacity = '0.5'
-      elements[i].style.pointerEvents = 'none'
+      elements[i].style.setProperty('opacity', '0.5', 'important')
+      elements[i].style.setProperty('pointer-events', 'none', 'important')
+      elements[i].classList.add('interceptor-loading-active')
     } else {
       // Ngược lại thì trả về như ban đầu, không làm gì cả
-      elements[i].style.opacity= 'initial'
-      elements[i].style.pointerEvents = 'initial'
+      elements[i].style.setProperty('opacity', 'initial', 'important')
+      elements[i].style.setProperty('pointer-events', 'initial', 'important')
+      elements[i].classList.remove('interceptor-loading-active')
     }
   }
 }

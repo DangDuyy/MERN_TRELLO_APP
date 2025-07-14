@@ -24,6 +24,9 @@ import {
 import { useForm } from 'react-hook-form'
 import { EMAIL_RULE, EMAIL_RULE_MESSAGE, FIELD_REQUIRED_MESSAGE, PASSWORD_RULE, PASSWORD_RULE_MESSAGE } from '~/utils/validators'
 import FieldErrorAlert from '../Form/FieldAlertError'
+import { registerUserAPI } from '~/apis/index'
+import { toast } from 'react-toastify'
+
 function RegisterForm() {
   const navigate = useNavigate()
   const { register, handleSubmit, formState: { errors }, watch } = useForm()
@@ -31,8 +34,13 @@ function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
-  const submitRegister = (e) => {
-    console.log('register data ', e)
+  const submitRegister = (data) => {
+    const { email, password } = data
+    toast.promise(registerUserAPI({ email, password }),
+      { pending: 'Registration is in progress ... ' }
+    ).then(user => {
+      navigate(`/login?registeredEmail=${user.email}`)
+    })
   }
 
   return (

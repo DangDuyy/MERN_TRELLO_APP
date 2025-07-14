@@ -9,6 +9,7 @@ import {
   VisibilityOff
 } from '@mui/icons-material'
 import {
+  Alert,
   Box,
   Button,
   Divider,
@@ -20,12 +21,17 @@ import {
   Typography
 } from '@mui/material'
 import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { FIELD_REQUIRED_MESSAGE, EMAIL_RULE, EMAIL_RULE_MESSAGE, PASSWORD_RULE, PASSWORD_RULE_MESSAGE } from '~/utils/validators'
 import FieldErrorAlert from '~/pages/Form/FieldAlertError'
 
 function LoginForm() {
   const { register, handleSubmit, formState: { errors } } = useForm()
+
+  let [searchParams] = useSearchParams()
+  const registeredEmail = searchParams.get('registeredEmail')
+  const verifiedEmail = searchParams.get('verifiedEmail')
+
   const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate()
 
@@ -47,7 +53,7 @@ function LoginForm() {
       <Paper
         elevation={10}
         sx={{
-          p: 4,
+          p: 3,
           width: '100%',
           maxWidth: 400,
           borderRadius: 3,
@@ -55,7 +61,7 @@ function LoginForm() {
           backdropFilter: 'blur(10px)'
         }}
       >
-        <Box sx={{ textAlign: 'center', mb: 3 }}>
+        <Box sx={{ textAlign: 'center', mb: 2 }}>
           <Typography
             variant="h4"
             sx={{
@@ -69,6 +75,41 @@ function LoginForm() {
           <Typography variant="body2" color="text.secondary">
             Sign in to your account
           </Typography>
+          <Box sx={{ marginTop: '1em', display: 'flex', justifyContent: 'center', flexDirection:'column', padding: '0 1em', gap: 1 }}>
+            {verifiedEmail &&
+              <Alert
+                severity="success"
+                sx={{
+                  '.MuiAlert-message': { overflow: 'hidden' },
+                  py: 1,
+                  fontSize: '0.875rem',
+                  lineHeight: 1.4
+                }}
+              >
+                Your email{' '}
+                <Typography component="span" sx={{ fontWeight: 'bold', '&:hover': { color: '#fdba26' } }}>
+                  {verifiedEmail}
+                </Typography>
+                {' '}has been verified. Now you can login to enjoy our services! Have a good day!
+              </Alert>
+            }
+            {registeredEmail &&
+            <Alert
+              severity="info"
+              sx={{
+                '.MuiAlert-message': { overflow: 'hidden' },
+                py: 1,
+                fontSize: '0.875rem',
+                lineHeight: 1.4
+              }}
+            >
+              An email has been sent to{' '}
+              <Typography component="span" sx={{ fontWeight: 'bold', '&:hover': { color: '#fdba26' } }}>
+                {registeredEmail}
+              </Typography>
+              . Please check and verify your account before logging in!
+            </Alert>}
+          </Box>
         </Box>
 
         <form onSubmit={handleSubmit(submitLogIn)}>
@@ -139,8 +180,8 @@ function LoginForm() {
               borderRadius: 2,
               textTransform: 'none',
               fontSize: '1rem',
-              mb: 2,
-              mt: 2
+              mb: 1,
+              mt: 1
             }}
           >
             Sign In
@@ -158,11 +199,11 @@ function LoginForm() {
             startIcon={<GoogleIcon />}
             size="large"
             sx={{
-              py: 1.5,
+              py: 0.5,
               borderRadius: 2,
               textTransform: 'none',
               fontSize: '1rem',
-              mb: 2
+              mb: 1
             }}
           >
             Continue with Google

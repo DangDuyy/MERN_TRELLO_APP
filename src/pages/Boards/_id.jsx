@@ -7,15 +7,15 @@ import BoardContent from './BoardContent/BoardContent'
 // import { mockData } from '~/apis/mock-data'
 import { cloneDeep } from 'lodash'
 import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useParams } from 'react-router-dom'
 import { moveCardToDifferentColumnAPI, updateBoardDetailsAPI, updateColumnDetailsAPI } from '~/apis'
+import PageLoadingSpinner from '~/components/Loading/pageLoadingSpinner'
 import {
   fetchBoardDetailsAPI,
   selectCurrentActiveBoard,
   updateCurrentActiveBoard
 } from '~/redux/activeBoard/activeBoardSlice'
-import { Box } from '@mui/material'
-import { useDispatch, useSelector } from 'react-redux'
-import { useParams } from 'react-router-dom'
 function Board() {
   const dispatch = useDispatch()
   //không dùng state của component và dùng state của redux
@@ -84,7 +84,7 @@ function Board() {
 
   if (!board) {
     return (
-      <Box>Loading...</Box>
+      <PageLoadingSpinner caption='Loading Board .....'/>
     )
   }
 
