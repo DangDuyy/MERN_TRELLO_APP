@@ -20,12 +20,16 @@ import {
   TextField,
   Typography
 } from '@mui/material'
+import { toast } from 'react-toastify'
 import { useForm } from 'react-hook-form'
+import { useDispatch, useSelector } from 'react-redux'
+import { loginUserAPI } from '~/redux/user/userSlice'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { FIELD_REQUIRED_MESSAGE, EMAIL_RULE, EMAIL_RULE_MESSAGE, PASSWORD_RULE, PASSWORD_RULE_MESSAGE } from '~/utils/validators'
 import FieldErrorAlert from '~/pages/Form/FieldAlertError'
-
+// import {}
 function LoginForm() {
+  const dispatch = useDispatch()
   const { register, handleSubmit, formState: { errors } } = useForm()
 
   let [searchParams] = useSearchParams()
@@ -36,6 +40,16 @@ function LoginForm() {
   const navigate = useNavigate()
 
   const submitLogIn = (data) => {
+
+    const { email, password } = data
+    toast.promise(
+      dispatch(loginUserAPI({ email, password })),
+      { pending: 'Login in...' }
+    ).then((res) => {
+      console.log(res)
+      //doan nay kiem tra khong co loi thi moi redirect ve route /
+      if (!res.error) navigate('/')
+    })
     console.log('data ', data)
   }
 
