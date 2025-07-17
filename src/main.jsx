@@ -13,23 +13,32 @@ import { Provider } from 'react-redux'
 
 //cau hinh react-router-dom voi browserrouter
 import { BrowserRouter } from 'react-router-dom'
+
+//cau hinh redux-persist
+import { PersistGate } from 'redux-persist/integration/react'
+import { persistStore } from 'redux-persist'
+
+const persistor = persistStore(store)
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <BrowserRouter basename='/'>
     <Provider store={store} >
-      <CssVarsProvider theme={theme}> {/* Truyền theme vào đây */}
-        <ConfirmProvider
-          sx={{
-            allowClose: false,
-            dialogProps: { maxWidth: 'xs' },
-            buttonOrder: ['confirm', 'order'],
-            confirmationButtonProps: { color: 'secondary', variant: 'outlined' },
-            cancellationButtonProps: { color: 'inherit' }
-          }}>
-          <CssBaseline />
-          <App />
-          <ToastContainer position="bottom-left" theme="colored"/>
-        </ConfirmProvider>
-      </CssVarsProvider>
+      <PersistGate persistor={persistor}>
+        <CssVarsProvider theme={theme}> {/* Truyền theme vào đây */}
+          <ConfirmProvider
+            sx={{
+              allowClose: false,
+              dialogProps: { maxWidth: 'xs' },
+              buttonOrder: ['confirm', 'order'],
+              confirmationButtonProps: { color: 'secondary', variant: 'outlined' },
+              cancellationButtonProps: { color: 'inherit' }
+            }}>
+            <CssBaseline />
+            <App />
+            <ToastContainer position="bottom-left" theme="colored"/>
+          </ConfirmProvider>
+        </CssVarsProvider>
+      </PersistGate>
     </Provider>
   </BrowserRouter>
 )
