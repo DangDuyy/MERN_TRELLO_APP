@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
-import { activeBoardReducer, activeBoardSlice } from './activeBoard/activeBoardSlice'
+import { activeBoardReducer } from './activeBoard/activeBoardSlice'
 import { userReducer } from './user/userSlice'
 
 //cau hinh redux-persist
