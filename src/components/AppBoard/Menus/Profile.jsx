@@ -10,12 +10,18 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
 import React from 'react'
+
 import { useSelector, useDispatch } from 'react-redux'
-import { selectCurrentUser } from '~/redux/user/userSlice'
-import { logoutUserAPI } from '~/redux/user/userSlice'
+import { selectCurrentUser, logoutUserAPI } from '~/redux/user/userSlice'
 import { useConfirm } from 'material-ui-confirm'
+import { current } from '@reduxjs/toolkit'
 
 export default function Profile() {
+  const dispatch = useDispatch()
+  const currentUser = useSelector(selectCurrentUser)
+
+  const confirmLogout = useConfirm()
+
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
   const handleClick = (event) => {
@@ -23,6 +29,16 @@ export default function Profile() {
   }
   const handleClose = () => {
     setAnchorEl(null)
+  }
+
+  const handleLogout = () => {
+    confirmLogout({
+      title: 'Log out of your account',
+      confirmationText: 'OK',
+      cancellationText: 'Cancel'
+    }).then(() => {
+      dispatch(logoutUserAPI())
+    }).catch(() => {})
   }
 
   return (
@@ -36,8 +52,7 @@ export default function Profile() {
           aria-haspopup="true"
           aria-expanded={open ? 'true' : undefined}
         >
-          <Avatar sx={{ width: 32, height: 32 }}
-            src="https://scontent.fsgn7-2.fna.fbcdn.net/v/t39.30808-1/499543246_1342771207016203_2106652853715018525_n.jpg?stp=c0.512.1536.1536a_dst-jpg_s160x160_tt6&_nc_cat=104&ccb=1-7&_nc_sid=e99d92&_nc_ohc=H4iQ4Ka_vvcQ7kNvwF-knI7&_nc_oc=AdnxAnrb71-6mS37qJTrHWMh7PaFwia4qG_j6if67PVTGTWQ6JgrzWFvqSVtfDIb5JbnUQ9hm8Tlv1QzKXylF8Tu&_nc_zt=24&_nc_ht=scontent.fsgn7-2.fna&_nc_gid=0l9tUMQ3mTbOcJb7jGmQwQ&oh=00_AfOEr6tzh89gd-l_C_Y0nJPzi7CIhXuaGgauIUxSArhykA&oe=6851F606">M</Avatar>
+          <Avatar src={currentUser?.avatar} />
         </IconButton>
       </Tooltip>
       <Menu
@@ -45,6 +60,7 @@ export default function Profile() {
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
+        onClick={handleClose}
         slotProps={{
           list: {
             'aria-labelledby': 'basic-button-Profile'
@@ -54,7 +70,9 @@ export default function Profile() {
         <MenuItem sx={{
           '&:hover': { color: 'success.light' }
         }}>
-          <Avatar sx={{width: 28, height: 28, mr:2 }} /> Profile
+          <Avatar
+            src={currentUser?.avatar}
+            sx={{ width: 28, height: 28, mr:2 }} /> Profile
         </MenuItem>
         <MenuItem >
           <Avatar sx={{width: 28, height: 28, mr:2 }} /> My account
@@ -72,12 +90,14 @@ export default function Profile() {
           </ListItemIcon>
           Settings
         </MenuItem>
-        <MenuItem sx={{
-          '&:hover': {
-            color: 'warning.dark',
-            '& .logout-icon': { color: 'warning.dark' }
-          }
-        }}>
+        <MenuItem
+          onClick={handleLogout}
+          sx={{
+            '&:hover': {
+              color: 'warning.dark',
+              '& .logout-icon': { color: 'warning.dark' }
+            }
+          }}>
           <ListItemIcon>
             <Logout className='logout-icon' fontSize="small" />
           </ListItemIcon>

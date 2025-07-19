@@ -18,6 +18,11 @@ import { BrowserRouter } from 'react-router-dom'
 import { PersistGate } from 'redux-persist/integration/react'
 import { persistStore } from 'redux-persist'
 
+//ky thuat inject store: la ki thuat khi can su dung bien redux store o cac file ngoai pham vi cua du an
+import { injectStore } from '~/utils/authorizeAxios'
+
+injectStore(store)
+
 const persistor = persistStore(store)
 
 ReactDOM.createRoot(document.getElementById('root')).render(

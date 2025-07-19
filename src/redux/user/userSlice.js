@@ -20,6 +20,7 @@ export const logoutUserAPI = createAsyncThunk(
   'users/logoutUserAPI',
   async (showSuccessMessage = true) => {
     const response = await authorizeAxiosInstance.delete(`${API_ROOT}/v1/users/logout`)
+    console.log(response)
     if (showSuccessMessage) {
       toast.success('Logged out successfully!')
     }
@@ -39,6 +40,9 @@ export const userSlice = createSlice({
       //action.payload chinh la response.data tra ve o tren
       const user = action.payload
       state.currentUser = user
+    })
+    builder.addCase(logoutUserAPI.fulfilled, (state, action) => {
+      state.currentUser =null
     })
   }
 })
