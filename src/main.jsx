@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom/client'
 import App from '~/App.jsx'
 import { ConfirmProvider } from 'material-ui-confirm'
 import theme from '~/theme.js'
+import { GlobalStyles } from '@mui/material'
 //cau hinh react toastify
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -38,6 +39,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
               confirmationButtonProps: { color: 'secondary', variant: 'outlined' },
               cancellationButtonProps: { color: 'inherit' }
             }}>
+            <GlobalStyles styles={{ a: { textDecoration: 'none' }}} />
             <CssBaseline />
             <App />
             <ToastContainer position="bottom-left" theme="colored"/>

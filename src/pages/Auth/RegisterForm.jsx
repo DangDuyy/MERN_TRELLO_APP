@@ -23,7 +23,7 @@ import {
 } from '@mui/icons-material'
 import { useForm } from 'react-hook-form'
 import { EMAIL_RULE, EMAIL_RULE_MESSAGE, FIELD_REQUIRED_MESSAGE, PASSWORD_RULE, PASSWORD_RULE_MESSAGE } from '~/utils/validators'
-import FieldErrorAlert from '../Form/FieldAlertError'
+import FieldErrorAlert from '../../components/Form/FieldErrorAlert'
 import { registerUserAPI } from '~/apis/index'
 import { toast } from 'react-toastify'
 

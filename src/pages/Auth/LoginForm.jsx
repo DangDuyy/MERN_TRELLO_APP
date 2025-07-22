@@ -26,7 +26,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { loginUserAPI } from '~/redux/user/userSlice'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { FIELD_REQUIRED_MESSAGE, EMAIL_RULE, EMAIL_RULE_MESSAGE, PASSWORD_RULE, PASSWORD_RULE_MESSAGE } from '~/utils/validators'
-import FieldErrorAlert from '~/pages/Form/FieldAlertError'
+import FieldErrorAlert from '~/components/Form/FieldErrorAlert'
 // import {}
 function LoginForm() {
   const dispatch = useDispatch()

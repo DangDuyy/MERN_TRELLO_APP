@@ -11,10 +11,10 @@ import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
 import React from 'react'
 
-import { useSelector, useDispatch } from 'react-redux'
-import { selectCurrentUser, logoutUserAPI } from '~/redux/user/userSlice'
 import { useConfirm } from 'material-ui-confirm'
-import { current } from '@reduxjs/toolkit'
+import { useDispatch, useSelector } from 'react-redux'
+import { logoutUserAPI, selectCurrentUser } from '~/redux/user/userSlice'
+import { Link } from 'react-router-dom'
 
 export default function Profile() {
   const dispatch = useDispatch()
@@ -67,13 +67,15 @@ export default function Profile() {
           }
         }}
       >
-        <MenuItem sx={{
-          '&:hover': { color: 'success.light' }
-        }}>
-          <Avatar
-            src={currentUser?.avatar}
-            sx={{ width: 28, height: 28, mr:2 }} /> Profile
-        </MenuItem>
+        <Link to="/settings/account" style={{ color: 'inherit' }}>
+          <MenuItem sx={{
+            '&:hover': { color: 'success.light' }
+          }}>
+            <Avatar
+              src={currentUser?.avatar}
+              sx={{ width: 28, height: 28, mr:2 }} /> Profile
+          </MenuItem>
+        </Link>
         <MenuItem >
           <Avatar sx={{width: 28, height: 28, mr:2 }} /> My account
         </MenuItem>
