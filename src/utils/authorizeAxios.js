@@ -1,8 +1,7 @@
 import axios from 'axios'
-import { toast } from 'react-toastify'
-import { interceptorLoadingElements } from './formatters'
 import { refreshTokenAPI } from '~/apis'
-import { selectCurrentUser, logoutUserAPI } from '~/redux/user/userSlice'
+import { logoutUserAPI } from '~/redux/user/userSlice'
+import { interceptorLoadingElements } from './formatters'
 
 // Không thể suport store from /redux/store' theo cách thông thường ở đây
 // * Giải pháp: Inject store: La Kỹ thuật khi cần sử dụng biển redux store ở các file ngoài pham vi component như file authorizeAxios hiện tại

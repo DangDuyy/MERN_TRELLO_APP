@@ -7,15 +7,17 @@ import Button from '@mui/material/Button'
 import InputAdornment from '@mui/material/InputAdornment'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
-
+import { useDispatch } from 'react-redux'
+import { logoutUserAPI, updateUserAPI } from '~/redux/user/userSlice'
 import { useConfirm } from 'material-ui-confirm'
 import { useForm } from 'react-hook-form'
 import FieldErrorAlert from '~/components/Form/FieldErrorAlert'
 import { FIELD_REQUIRED_MESSAGE, PASSWORD_RULE, PASSWORD_RULE_MESSAGE } from '~/utils/validators'
+import { toast } from 'react-toastify'
 
 function SecurityTab() {
   const { register, handleSubmit, watch, formState: { errors } } = useForm()
-
+  const dispatch = useDispatch()
   // Ôn lại: https://www.npmjs.com/package/material-ui-confirm
   const confirmChangePassword = useConfirm()
   const submitChangePassword = (data) => {
@@ -28,11 +30,21 @@ function SecurityTab() {
       confirmationText: 'Confirm',
       cancellationText: 'Cancel'
     }).then(() => {
-      const { current_password, new_password, new_password_confirmation } = data
-      console.log('current_password: ', current_password)
-      console.log('new_password: ', new_password)
-      console.log('new_password_confirmation: ', new_password_confirmation)
+      const { current_password, new_password } = data
+      // console.log('current_password: ', current_password)
+      // console.log('new_password: ', new_password)
+      // console.log('new_password_confirmation: ', new_password_confirmation)
 
+      toast.promise(
+        dispatch(updateUserAPI({ current_password, new_password })),
+        { pending: 'Updating...' }
+      ).then(res => {
+        if (!res.error)
+        {
+          toast.success('Successfully changes your password. Please login again')
+          dispatch(logoutUserAPI(false))
+        }
+      })
       // Gọi API...
     }).catch(() => {})
   }
