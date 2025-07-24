@@ -84,6 +84,17 @@ function AccountTab() {
     }
 
     // Gọi API...
+    toast.promise(
+      dispatch(updateUserAPI( reqData )),
+      { pending: 'Updating...' }
+    ).then( res => {
+      if (!res.error) {
+        toast.success('Updated user successfully!')
+      }
+      //luu y,du co loi hay thanh cong thi cung phai clear gia tri cua file input, neu khong thi se khong the chon cung 1 file lien tiep duoc
+      e.target.value = ''
+    }
+    )
   }
 
   return (
