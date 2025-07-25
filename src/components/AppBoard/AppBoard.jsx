@@ -22,6 +22,7 @@ import InputAdornment from '@mui/material/InputAdornment'
 import SearchIcon from '@mui/icons-material/Search'
 import CloseIcon from '@mui/icons-material/Close'
 import { Link } from 'react-router-dom'
+import ToolTip from '@mui/material/Tooltip'
 
 function AppBar() {
   const [searchValue, setSearchValue] = useState('')
@@ -38,7 +39,11 @@ function AppBar() {
       overflowX: 'auto'
     }}>
       <Box sx={{ display: 'flex', alignItems:'center', gap:2 }}>
-        <AppsIcon sx={{ color:'white' }}/>
+        <Link to="/boards">
+          <ToolTip title="Board List">
+            <AppsIcon sx={{ color:'white', verticalAlign: 'middle' }}/> 
+          </ToolTip>
+        </Link>
         <Link to="/">
           <Box sx={{ display: 'flex', alignItems:'center', gap:0.5 }}>
             <SvgIcon component={TrelloIcon} fontSize='small' inheritViewBox sx={{ color: 'white' }}/>

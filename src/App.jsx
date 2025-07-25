@@ -6,6 +6,7 @@ import AccountVerification from '~/pages/Auth/AccountVerification'
 import { useSelector } from 'react-redux'
 import { selectCurrentUser } from '~/redux/user/userSlice'
 import Settings from '~/pages/Settings/Settings'
+import Boards from './pages/Boards'
 
 const ProtectedRoute = ({ user }) => {
   if (!user) return <Navigate to="/login" replace={true} />
@@ -21,11 +22,12 @@ function App() {
         //ở đây cần replace giá trị true để nó thay thế route /, có thể hiểu là route/ sẽ không còn nằm trong history của browser
         //thực hành để hiểu hơn bằng cách go home từ trang 404 xong thử quay lại bằng nút back của trình duyệt giữa 2 trường hợp có và không có replace
         <Navigate to="/boards/6861f8ec46d5cb5cdb103bb9" replace={true}/>
-      } />
+      }
+      />
       {/* // react route dom board */}
       <Route element={<ProtectedRoute user={currentUser} />} >
         <Route path='/boards/:boardId' element={ <Board/> }/>
-
+        <Route path='/boards' element={ <Boards/> } />
         {/* setting user */}
         <Route path='settings/account' element={ <Settings/>} />
         <Route path='settings/security' element={ <Settings/> } />
