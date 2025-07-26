@@ -72,3 +72,8 @@ export const createNewBoardAPI = async (data) => {
   const response = await authorizeAxiosInstance.post(`${API_ROOT}/v1/boards`, data)
   return response.data
 }
+
+export const updateCardDetailsAPI = async (cardId, data) => {
+  const response = await authorizeAxiosInstance.put(`${API_ROOT}/v1/cards/${cardId}`, data)
+  return response.data
+}

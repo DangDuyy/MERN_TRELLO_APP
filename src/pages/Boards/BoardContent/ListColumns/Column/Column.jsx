@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { ContentCopy, ContentPaste } from '@mui/icons-material'
@@ -8,22 +9,22 @@ import ContentCut from '@mui/icons-material/ContentCut'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 import DragHandleIcon from '@mui/icons-material/DragHandle'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import { Button, Tooltip, Typography } from '@mui/material'
+import { Button, Tooltip } from '@mui/material'
 import Box from '@mui/material/Box'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import TextField from '@mui/material/TextField'
-import { useState } from 'react'
-import { toast } from 'react-toastify'
-import ListCard from './ListCards/ListCard'
-import { useConfirm } from 'material-ui-confirm'
-import { useDispatch, useSelector } from 'react-redux'
-import { selectCurrentActiveBoard, updateCurrentActiveBoard } from '~/redux/activeBoard/activeBoardSlice'
 import { cloneDeep } from 'lodash'
+import { useConfirm } from 'material-ui-confirm'
+import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { toast } from 'react-toastify'
 import { createNewCardAPI, deleteColumnDetailAPI, updateColumnDetailsAPI } from '~/apis'
 import ToggleFocusInput from '~/components/Form/ToggleFocusInput'
+import { selectCurrentActiveBoard, updateCurrentActiveBoard } from '~/redux/activeBoard/activeBoardSlice'
+import ListCard from './ListCards/ListCard'
 function Column({ column }) {
   const dispatch = useDispatch()
   const board = useSelector(selectCurrentActiveBoard)
@@ -113,7 +114,7 @@ function Column({ column }) {
   }
 
   const onUpdateColumnTitle = (newTitle) => {
-    console.log('newTitle', newTitle)
+    // console.log('newTitle', newTitle)
     //goi api
 
     toast.promise(updateColumnDetailsAPI(column._id, { title: newTitle }), {

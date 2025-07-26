@@ -8,8 +8,12 @@ import CardContent from '@mui/material/CardContent'
 import CardMedia from '@mui/material/CardMedia'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
+import { useDispatch } from 'react-redux'
+import { updateCurrentActiveCard } from '~/redux/activeCard/activeCardSlice'
 
 function Card( { card }) {
+
+  const dispatch = useDispatch()
 
   const shouldShowCardAction = () => {
     return !!card?.memberIds?.length || !!card?.comments?.length || !!card?.attachments?.length
@@ -24,8 +28,13 @@ function Card( { card }) {
     transition
   }
 
+  //cap nhat data cho active card trong redux
+  const setActiveCard = () => {
+    dispatch(updateCurrentActiveCard(card))
+  }
   return (
     <MuiCard
+      onClick = {setActiveCard}
       ref={setNodeRef} style={dndKitCardStyles} {...attributes} {...listeners}
       sx={{
         cursor: 'pointer',
