@@ -30,6 +30,22 @@ export const activeBoardSlice = createSlice({
 
       //update lại dữ liệu của currentActiveBoard
       state.currentActiveBoard = board
+    },
+    updateCardInBoard: (state, action) => {
+      //update nested data (redux)
+      const incomingCard = action.payload
+
+      //tim dan tu board den conlumn roi den card
+      const column = state.currentActiveBoard.columns.find(i => i._id === incomingCard.columnId)
+      if (column) {
+        const card = column.cards.find(i => i._id === incomingCard._id)
+        if (card) {
+          //dung cach nay de luu tat cac attribute cua card dang tuong tac vao redux
+          Object.keys(incomingCard).forEach(key => {
+            card[key] = incomingCard[key]
+          })
+        }
+      }
     }
   },
   //extraReducers: nơi xử lí dữ liệu bất đồng bộ, khác với reducers (object), cái này là 1 arrow function
@@ -38,6 +54,8 @@ export const activeBoardSlice = createSlice({
     builder.addCase(fetchBoardDetailsAPI.fulfilled, (state, action) => {
       //action.payload chinh la response.data tra ve o tren
       let board = action.payload
+      //thanh vien trong board se la gop lai cua 2 mang owner va member
+      board.FE_allUsers = board.owners.concat(board.members)
       //xử lý dữ liệu nếu cần thiết
       //...
       board.columns = mapOrder(board.columns, board.columnOrderIds, '_id')
@@ -55,7 +73,7 @@ export const activeBoardSlice = createSlice({
 //lưu ý ở trên không thấy properties actions đâu cả , đơn giản vì những actions này được redux tạo tự động theo tên của reducer
 //thường dùng để cập nhật redux store
 // Action creators are generated for each case reducer function
-export const { updateCurrentActiveBoard } = activeBoardSlice.actions
+export const { updateCurrentActiveBoard, updateCardInBoard } = activeBoardSlice.actions
 //selector: là nơi dành cho các component bên dưới gọi bằng hook useSelector() để lấy dữ liệu từ trong kho redux store ra sử dụng
 //hơi khác với actions: lấy dữ liệu ra khỏi redux store
 export const selectCurrentActiveBoard = (state) => {

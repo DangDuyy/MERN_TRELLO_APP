@@ -78,7 +78,7 @@ function BoardBar({ board }) {
           Invite
         </Button>
         {/* xu ly hien thi user trong 1 board */}
-        <BoardUserGroup/>
+        <BoardUserGroup boardUsers={board.FE_allUsers}/>
 
       </Box>
     </Box>

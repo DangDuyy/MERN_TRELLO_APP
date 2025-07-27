@@ -1,11 +1,11 @@
-import { useState } from 'react'
-import Box from '@mui/material/Box'
-import Avatar from '@mui/material/Avatar'
-import Tooltip from '@mui/material/Tooltip'
-import Popover from '@mui/material/Popover'
 import AddIcon from '@mui/icons-material/Add'
-import Badge from '@mui/material/Badge'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import Avatar from '@mui/material/Avatar'
+import Badge from '@mui/material/Badge'
+import Box from '@mui/material/Box'
+import Popover from '@mui/material/Popover'
+import Tooltip from '@mui/material/Tooltip'
+import { useState } from 'react'
 
 function CardUserGroup({ cardMemberIds = [] }) {
   /**

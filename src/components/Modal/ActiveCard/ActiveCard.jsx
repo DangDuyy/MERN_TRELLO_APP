@@ -1,45 +1,46 @@
-import { useState } from 'react'
-import Box from '@mui/material/Box'
-import Modal from '@mui/material/Modal'
-import Typography from '@mui/material/Typography'
-import CreditCardIcon from '@mui/icons-material/CreditCard'
-import CancelIcon from '@mui/icons-material/Cancel'
-import Grid from '@mui/material/Unstable_Grid2'
-import Stack from '@mui/material/Stack'
-import Divider from '@mui/material/Divider'
-import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined'
-import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined'
-import TaskAltOutlinedIcon from '@mui/icons-material/TaskAltOutlined'
-import WatchLaterOutlinedIcon from '@mui/icons-material/WatchLaterOutlined'
-import AttachFileOutlinedIcon from '@mui/icons-material/AttachFileOutlined'
-import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined'
-import AutoFixHighOutlinedIcon from '@mui/icons-material/AutoFixHighOutlined'
-import AspectRatioOutlinedIcon from '@mui/icons-material/AspectRatioOutlined'
-import AddToDriveOutlinedIcon from '@mui/icons-material/AddToDriveOutlined'
+/* eslint-disable no-console */
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
-import ArrowForwardOutlinedIcon from '@mui/icons-material/ArrowForwardOutlined'
-import ContentCopyOutlinedIcon from '@mui/icons-material/ContentCopyOutlined'
-import AutoAwesomeOutlinedIcon from '@mui/icons-material/AutoAwesomeOutlined'
+import AddToDriveOutlinedIcon from '@mui/icons-material/AddToDriveOutlined'
 import ArchiveOutlinedIcon from '@mui/icons-material/ArchiveOutlined'
+import ArrowForwardOutlinedIcon from '@mui/icons-material/ArrowForwardOutlined'
+import AspectRatioOutlinedIcon from '@mui/icons-material/AspectRatioOutlined'
+import AttachFileOutlinedIcon from '@mui/icons-material/AttachFileOutlined'
+import AutoAwesomeOutlinedIcon from '@mui/icons-material/AutoAwesomeOutlined'
+import AutoFixHighOutlinedIcon from '@mui/icons-material/AutoFixHighOutlined'
+import CancelIcon from '@mui/icons-material/Cancel'
+import ContentCopyOutlinedIcon from '@mui/icons-material/ContentCopyOutlined'
+import CreditCardIcon from '@mui/icons-material/CreditCard'
+import DvrOutlinedIcon from '@mui/icons-material/DvrOutlined'
+import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined'
+import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined'
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined'
 import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined'
 import SubjectRoundedIcon from '@mui/icons-material/SubjectRounded'
-import DvrOutlinedIcon from '@mui/icons-material/DvrOutlined'
+import TaskAltOutlinedIcon from '@mui/icons-material/TaskAltOutlined'
+import WatchLaterOutlinedIcon from '@mui/icons-material/WatchLaterOutlined'
+import Box from '@mui/material/Box'
+import Divider from '@mui/material/Divider'
+import Modal from '@mui/material/Modal'
+import Stack from '@mui/material/Stack'
+import Typography from '@mui/material/Typography'
+import Grid from '@mui/material/Unstable_Grid2'
 
+import { styled } from '@mui/material/styles'
+import { useDispatch, useSelector } from 'react-redux'
+import { toast } from 'react-toastify'
+import { updateCardDetailsAPI } from '~/apis'
 import ToggleFocusInput from '~/components/Form/ToggleFocusInput'
 import VisuallyHiddenInput from '~/components/Form/VisuallyHiddenInput'
-import { singleFileValidator } from '~/utils/validators'
-import { toast } from 'react-toastify'
-import CardUserGroup from './CardUserGroup'
-import CardDescriptionMdEditor from './CardDescriptionMdEditor'
-import CardActivitySection from './CardActivitySection'
-import { styled } from '@mui/material/styles'
-import { updateCardDetailsAPI } from '~/apis'
+import { updateCardInBoard } from '~/redux/activeBoard/activeBoardSlice'
 import {
   clearCurrentActiveCard,
   selectCurrentActiveCard,
   updateCurrentActiveCard
 } from '~/redux/activeCard/activeCardSlice'
-import { useDispatch, useSelector } from 'react-redux'
+import { singleFileValidator } from '~/utils/validators'
+import CardActivitySection from './CardActivitySection'
+import CardDescriptionMdEditor from './CardDescriptionMdEditor'
+import CardUserGroup from './CardUserGroup'
 
 const SidebarItem = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -71,11 +72,12 @@ function ActiveCard() {
   //function dung chung cho viec update card
   const callApiUpdateCard = async (data) => {
     const updatedData = await updateCardDetailsAPI(activeCard._id, data)
-    console.log(updatedData)
+    // console.log(updatedData)
     //b1: cap nhat lai cac card dang active trong modal hien tai
     dispatch(updateCurrentActiveCard(updatedData))
 
     //b2: cap nhat lai ban ghi card trong activeBoard (nestedData)
+    dispatch(updateCardInBoard(updatedData))
     //dispatch(updateCardInBoard(updatedData))
 
     return updatedData
@@ -90,6 +92,10 @@ function ActiveCard() {
     callApiUpdateCard({ title: newTitle.trim() })
   }
 
+  const onUpdateCardDescription = ( newDescription ) => {
+    callApiUpdateCard({ description: newDescription })
+  }
+
   const onUploadCardCover = (event) => {
     console.log(event.target?.files[0])
     const error = singleFileValidator(event.target?.files[0])
@@ -102,6 +108,12 @@ function ActiveCard() {
 
     // callApiUpdateCard({ title: new})
     // Gọi API...
+    toast.promise(
+      callApiUpdateCard(reqData).finally(() => event.target.value = ''),
+      {
+        pending: 'Updating...'
+      }
+    )
   }
 
   return (
@@ -169,7 +181,10 @@ function ActiveCard() {
               </Box>
 
               {/* Feature 03: Xử lý mô tả của Card */}
-              <CardDescriptionMdEditor />
+              <CardDescriptionMdEditor
+                cardDescriptionProp={activeCard?.description}
+                handleUpdateCardDescription={onUpdateCardDescription}
+              />
             </Box>
 
             <Box sx={{ mb: 3 }}>
