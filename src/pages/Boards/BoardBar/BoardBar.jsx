@@ -10,7 +10,7 @@ import Button from '@mui/material/Button'
 import Chip from '@mui/material/Chip'
 import { capitalizeFirstLetter } from '~/utils/formatters'
 import BoardUserGroup from './BoardUserGroup'
-
+import InviteBoardUser from './InviteBoardUser'
 const MENU_STYLES = {
   color:'white',
   backgroundColor: 'transparent',
