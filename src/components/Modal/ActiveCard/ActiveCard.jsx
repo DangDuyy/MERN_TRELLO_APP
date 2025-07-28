@@ -33,8 +33,9 @@ import ToggleFocusInput from '~/components/Form/ToggleFocusInput'
 import VisuallyHiddenInput from '~/components/Form/VisuallyHiddenInput'
 import { updateCardInBoard } from '~/redux/activeBoard/activeBoardSlice'
 import {
-  clearCurrentActiveCard,
+  clearAndHideCurrentActiveCard,
   selectCurrentActiveCard,
+  selectIsShowModalActiveCard,
   updateCurrentActiveCard
 } from '~/redux/activeCard/activeCardSlice'
 import { singleFileValidator } from '~/utils/validators'
@@ -68,6 +69,7 @@ const SidebarItem = styled(Box)(({ theme }) => ({
 function ActiveCard() {
   const dispatch = useDispatch()
   const activeCard = useSelector(selectCurrentActiveCard)
+  const isShowModalActiveCard = useSelector(selectIsShowModalActiveCard)
 
   //function dung chung cho viec update card
   const callApiUpdateCard = async (data) => {
@@ -84,7 +86,7 @@ function ActiveCard() {
   }
   const handleCloseModal = () => {
   //
-    dispatch(clearCurrentActiveCard())
+    dispatch(clearAndHideCurrentActiveCard())
   }
   const onUpdateCardTitle = (newTitle) => {
     // console.log(newTitle.trim())
@@ -119,7 +121,7 @@ function ActiveCard() {
   return (
     <Modal
       disableScrollLock
-      open={true}
+      open={isShowModalActiveCard}
       onClose={handleCloseModal} // Sử dụng onClose trong trường hợp muốn đóng Modal bằng nút ESC hoặc click ra ngoài Modal
       sx={{ overflowY: 'auto' }}>
       <Box sx={{

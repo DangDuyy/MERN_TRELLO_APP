@@ -25,6 +25,7 @@ function Board() {
   // const [board, setBoard] = useState(null)
   //lay du lieu tu trong redux ra
   const board = useSelector(selectCurrentActiveBoard)
+  // eslint-disable-next-line no-unused-vars
   const activeCard = useSelector(selectCurrentActiveCard)
   const { boardId } = useParams()
   //goi API bang useEffect
@@ -93,8 +94,8 @@ function Board() {
 
   return (
     <Container disableGutters maxWidth={false} sx={{ height: '100vh', backgroundColor:'primary.main' }}>
-      {/* Modal CActive Card, check dong/mo dua theo dieu kien co ton tai data activeCard luu trong Redux hay khong thi moi render. Moi thoi diem chi ton tai 1 cai Modal Card dang Active */}
-      { activeCard && <ActiveCard /> }
+      {/* Modal active Card, check dong/mo dua theo dieu kien co ton tai data activeCard luu trong Redux hay khong thi moi render. Moi thoi diem chi ton tai 1 cai Modal Card dang Active */}
+      <ActiveCard />
       {/* Cac thanh phan con lai cua board detail */}
       <AppBar />
       <BoardBar board={board} />

@@ -1,8 +1,10 @@
+/* eslint-disable no-unused-vars */
 import { createSlice } from '@reduxjs/toolkit'
 
 //khoi tao gia tri 1 slice trong redux
 const initialState = {
-  currentActiveCard: null
+  currentActiveCard: null,
+  isShowModalActiveCard: false
 }
 
 //khoi tao 1 slice trong kho luu tru - redux store
@@ -12,9 +14,13 @@ export const activeCardSlice = createSlice({
   //reducers: noi xu ly du lieu dong bo
   reducers: {
     //luu y luon la o day can cap ngoac nhon cho function cho reducer cho du code ben trong chi co 1 dong, day la rule cua redux
-
-    clearCurrentActiveCard: (state) => {
+    showModalActiveCard: (state) => {
+      state.isShowModalActiveCard = true
+    },
+    //clear data va dong modal active card
+    clearAndHideCurrentActiveCard: (state) => {
       state.currentActiveCard = null
+      state.isShowModalActiveCard = false
     },
     updateCurrentActiveCard: (state, action) => {
       const fullCard = action.payload
@@ -31,11 +37,15 @@ export const activeCardSlice = createSlice({
 //actions: la noi danh cho cac components ben duoi goi bang dispatch() toi no de cap nhat lai du lieu thong qua reducer(chay dong bo)
 //de y o tren thi khong thay properties actions dau ca, boi vi nhung action nay don gian chi la duoc redux tao tu dong theo ten cua reducer
 
-export const { clearCurrentActiveCard, updateCurrentActiveCard } = activeCardSlice.actions
+export const { showModalActiveCard, clearAndHideCurrentActiveCard, updateCurrentActiveCard } = activeCardSlice.actions
 
 //selectors la noi dang cho cac component ben duoi goi bang hook useSelector() de lay du lieu trong kho redux store ra de su dung
 export const selectCurrentActiveCard = (state) => {
   return state.activeCard.currentActiveCard
+}
+
+export const selectIsShowModalActiveCard = (state) => {
+  return state.activeCard.isShowModalActiveCard
 }
 
 //cai file nay ten la slice nhung lai export 1 thu goi la user
