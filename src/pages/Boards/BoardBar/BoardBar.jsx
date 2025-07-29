@@ -2,11 +2,9 @@ import AddToDriveIcon from '@mui/icons-material/AddToDrive'
 import BoltIcon from '@mui/icons-material/Bolt'
 import DashboardIcon from '@mui/icons-material/Dashboard'
 import FilterListIcon from '@mui/icons-material/FilterList'
-import PersonAddIcon from '@mui/icons-material/PersonAdd'
 import VpnLockIcon from '@mui/icons-material/VpnLock'
 import { Tooltip } from '@mui/material'
 import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
 import Chip from '@mui/material/Chip'
 import { capitalizeFirstLetter } from '~/utils/formatters'
 import BoardUserGroup from './BoardUserGroup'
@@ -65,18 +63,8 @@ function BoardBar({ board }) {
         </Chip>
       </Box>
       <Box sx={{ display: 'flex', alignItems:'center', gap:2 }}>
-        <Button
-          variant="outlined"
-          sx={{
-            color: 'white',
-            borderColor:'white',
-            '&:hover': {
-              borderColor: 'white'
-            }
-          }}
-          startIcon={<PersonAddIcon/>} >
-          Invite
-        </Button>
+        {/* /xử lý mời user vào làm thành viên của board */}
+        <InviteBoardUser boardId={board._id} />
         {/* xu ly hien thi user trong 1 board */}
         <BoardUserGroup boardUsers={board.FE_allUsers}/>
 
