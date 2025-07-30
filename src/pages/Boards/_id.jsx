@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 // Board Details
 import Container from '@mui/material/Container'
-import AppBar from '~/components/AppBoard/AppBoard'
+import AppBar from '~/components/AppBoard/AppBar'
 import BoardBar from './BoardBar/BoardBar'
 import BoardContent from './BoardContent/BoardContent'
 // import { mockData } from '~/apis/mock-data'

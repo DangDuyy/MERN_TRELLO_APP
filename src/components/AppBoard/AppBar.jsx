@@ -23,6 +23,7 @@ import SearchIcon from '@mui/icons-material/Search'
 import CloseIcon from '@mui/icons-material/Close'
 import { Link } from 'react-router-dom'
 import ToolTip from '@mui/material/Tooltip'
+import Notifications from './Notifications/Notifications'
 
 function AppBar() {
   const [searchValue, setSearchValue] = useState('')
@@ -96,12 +97,10 @@ function AppBar() {
             }
           }}
         />
+        {/* dark light system mode */}
         <ModeSelect sx={{ minWidth: 120 }} />
-        <Tooltip title="Notifications">
-          <Badge color="warning" variant="dot" >
-            <NotificationsNoneIcon sx={{ color: 'white' }} />
-          </Badge>
-        </Tooltip>
+        {/* xu ly hien thi cac thong bao */}
+        <Notifications />
         <Tooltip title="Help">
           <HelpOutlineIcon sx={{ color: 'white' }}/>
         </Tooltip>
