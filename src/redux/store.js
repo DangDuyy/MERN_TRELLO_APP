@@ -6,19 +6,21 @@ import { activeCardReducer } from './activeCard/activeCardSlice'
 import { combineReducers } from 'redux'
 import { persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage' //default la local storage
+import { notificationsReducer } from './notifications/notificationsSlice'
 
 //cau hinh persist
 const rootPersistConfig = {
   key: 'root',
   storage: storage,
-  whitelist: 'user' //day la cho pheo SLICE USER se duoc luu vao local storage qua moi lan F5
+  whitelist: 'user' //day la cho phep SLICE USER se duoc luu vao local storage qua moi lan F5
 }
 
 //combine cac reducer vao 1 bien
 const reducers = combineReducers({
   activeBoard: activeBoardReducer,
   user: userReducer,
-  activeCard: activeCardReducer
+  activeCard: activeCardReducer,
+  notifications: notificationsReducer
 })
 
 //thuc hien persist reducer

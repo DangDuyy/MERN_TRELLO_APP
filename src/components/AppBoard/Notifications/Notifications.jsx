@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import moment from 'moment'
 import Badge from '@mui/material/Badge'
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
@@ -13,6 +13,8 @@ import Divider from '@mui/material/Divider'
 import GroupAddIcon from '@mui/icons-material/GroupAdd'
 import DoneIcon from '@mui/icons-material/Done'
 import NotInterestedIcon from '@mui/icons-material/NotInterested'
+import { useSelector, useDispatch } from 'react-redux'
+import { fetchInvitationsAPI, selectCurrentNotifications } from '~/redux/notifications/notificationsSlice'
 
 const BOARD_INVITATION_STATUS = {
   PENDING: 'PENDING',
@@ -34,6 +36,14 @@ function Notifications() {
     console.log('status: ', status)
   }
 
+  //lay du lieu notifications tu redux/store
+  const notifications = useSelector(selectCurrentNotifications)
+  //fetch danh sach cac loi moi invitations
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(fetchInvitationsAPI())
+  }, [dispatch])
   return (
     <Box>
       <Tooltip title="Notifications">
@@ -63,8 +73,9 @@ function Notifications() {
         onClose={handleClose}
         MenuListProps={{ 'aria-labelledby': 'basic-button-open-notification' }}
       >
-        {[...Array(0)].length === 0 && <MenuItem sx={{ minWidth: 200 }}>You do not have any new notifications.</MenuItem>}
-        {[...Array(6)].map((_, index) =>
+        {(!notifications || notifications.length === 0) &&
+        <MenuItem sx={{ minWidth: 200 }}>You do not have any new notifications.</MenuItem>}
+        {notifications?.map((notification, index) =>
           <Box key={index}>
             <MenuItem sx={{
               minWidth: 200,
@@ -111,7 +122,7 @@ function Notifications() {
                 {/* Thời gian của thông báo */}
                 <Box sx={{ textAlign: 'right' }}>
                   <Typography variant="span" sx={{ fontSize: '13px' }}>
-                    {moment().format('llll')}
+                    {moment(notification.createdAt).format('llll')}
                   </Typography>
                 </Box>
               </Box>

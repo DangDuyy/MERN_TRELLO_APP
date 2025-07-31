@@ -49,7 +49,29 @@ export const notificationsSlice = createSlice({
       let incomingInvitation = action.payload
       //doan nay dao nguoc lai invitation nhan duoc, don gian la de hien thi cai moi nhat len dau
       state.currentNotifications = Array.isArray(incomingInvitation) ? incomingInvitation.reverse() : []
+    }),
+    builder.addCase(updateBoardInvitationAPI.fulfilled, (state, action) => {
+      let incomingInvitation = action.payload
+      //cap nhat lai du lieu boardInvitation (ben trong no se la status moi sau khi update)
+      const getInvitation = state.currentNotifications.find( i => i._id === incomingInvitation._id)
+      getInvitation.boardInvitation = incomingInvitation.boardInvitation
     })
   }
-
 })
+//action creator are generated for each case reducer function
+//actions: la noi dang cho cac components ben duoi goi bang dispatch() toi no de cap nhat lai du lieu thong qua reducer(chay dong bo)
+// de y o tren thi khong thay properties actions dau ca, boi vi nhung cai actions nay don gian la duoc thang redux tao tu dong theo ten cua reducer nhe
+export const {
+  clearCurrentNotifications,
+  updateCurrentNotifications,
+  addNotification
+} = notificationsSlice.actions
+
+//selectors: la noi danh cho cac components ben duoi goi bang hook useSelector() de lay du lieu tu trong kho redux store de su dung
+export const selectCurrentNotifications = state => {
+  return state.notifications.currentNotifications
+}
+
+//tuy file ten la notificationsSlice nhung khi export phai lai reducers
+//export default notificationsSlice.reducer
+export const notificationsReducer = notificationsSlice.reducer
