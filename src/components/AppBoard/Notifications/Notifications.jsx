@@ -15,6 +15,7 @@ import DoneIcon from '@mui/icons-material/Done'
 import NotInterestedIcon from '@mui/icons-material/NotInterested'
 import { useSelector, useDispatch } from 'react-redux'
 import { fetchInvitationsAPI, selectCurrentNotifications, updateBoardInvitationAPI } from '~/redux/notifications/notificationsSlice'
+import { toast } from 'react-toastify'
 
 const BOARD_INVITATION_STATUS = {
   PENDING: 'PENDING',
@@ -35,7 +36,7 @@ function Notifications() {
   const updateBoardInvitation = (status, invitationId) => {
     dispatch(updateBoardInvitationAPI({ invitationId, status })).then((res) => {
       // eslint-disable-next-line no-console
-      console.log(res)
+      toast.error(res)
     })
   }
 
