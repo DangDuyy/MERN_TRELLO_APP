@@ -14,7 +14,7 @@ import GroupAddIcon from '@mui/icons-material/GroupAdd'
 import DoneIcon from '@mui/icons-material/Done'
 import NotInterestedIcon from '@mui/icons-material/NotInterested'
 import { useSelector, useDispatch } from 'react-redux'
-import { fetchInvitationsAPI, selectCurrentNotifications } from '~/redux/notifications/notificationsSlice'
+import { fetchInvitationsAPI, selectCurrentNotifications, updateBoardInvitationAPI } from '~/redux/notifications/notificationsSlice'
 
 const BOARD_INVITATION_STATUS = {
   PENDING: 'PENDING',
@@ -32,8 +32,11 @@ function Notifications() {
     setAnchorEl(null)
   }
 
-  const updateBoardInvitation = (status) => {
-    console.log('status: ', status)
+  const updateBoardInvitation = (status, invitationId) => {
+    dispatch(updateBoardInvitationAPI({ invitationId, status })).then((res) => {
+      // eslint-disable-next-line no-console
+      console.log(res)
+    })
   }
 
   //lay du lieu notifications tu redux/store
@@ -86,10 +89,10 @@ function Notifications() {
                 {/* Nội dung của thông báo */}
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                   <Box><GroupAddIcon fontSize="small" /></Box>
-                  <Box><strong>TrungQuanDev</strong> had invited you to join the board <strong>MERN Stack Advanced</strong></Box>
+                  <Box><strong>{notification.inviter?.displayName}</strong> had invited you to join the board <strong>{notification.board.title}</strong></Box>
                 </Box>
-
                 {/* Khi Status của thông báo này là PENDING thì sẽ hiện 2 Button */}
+                { notification.boardInvitation.status === BOARD_INVITATION_STATUS.PENDING &&
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, justifyContent: 'flex-end' }}>
                   <Button
                     className="interceptor-loading"
@@ -97,7 +100,7 @@ function Notifications() {
                     variant="contained"
                     color="success"
                     size="small"
-                    onClick={() => updateBoardInvitation(BOARD_INVITATION_STATUS.ACCEPTED)}
+                    onClick={() => updateBoardInvitation(BOARD_INVITATION_STATUS.ACCEPTED, notification._id)}
                   >
                     Accept
                   </Button>
@@ -107,16 +110,21 @@ function Notifications() {
                     variant="contained"
                     color="secondary"
                     size="small"
-                    onClick={() => updateBoardInvitation(BOARD_INVITATION_STATUS.REJECTED)}
+                    onClick={() => updateBoardInvitation(BOARD_INVITATION_STATUS.REJECTED, notification._id)}
                   >
                     Reject
                   </Button>
                 </Box>
+                }
 
                 {/* Khi Status của thông báo này là ACCEPTED hoặc REJECTED thì sẽ hiện thông tin đó lên */}
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, justifyContent: 'flex-end' }}>
-                  <Chip icon={<DoneIcon />} label="Accepted" color="success" size="small" />
-                  <Chip icon={<NotInterestedIcon />} label="Rejected" size="small" />
+                  {notification.boardInvitation.status === BOARD_INVITATION_STATUS.ACCEPTED &&
+                    <Chip icon={<DoneIcon />} label="Accepted" color="success" size="small" />
+                  }
+                  {notification.boardInvitation.status === BOARD_INVITATION_STATUS.REJECTED &&
+                    <Chip icon={<NotInterestedIcon />} label="Rejected" color="danger" size="small" />
+                  }
                 </Box>
 
                 {/* Thời gian của thông báo */}
@@ -128,7 +136,7 @@ function Notifications() {
               </Box>
             </MenuItem>
             {/* Cái đường kẻ Divider sẽ không cho hiện nếu là phần tử cuối */}
-            {index !== ([...Array(6)].length - 1) && <Divider />}
+            {index !== (notifications?.length - 1) && <Divider />}
           </Box>
         )}
       </Menu>
