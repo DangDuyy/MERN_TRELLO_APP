@@ -42,6 +42,7 @@ import CardActivitySection from './CardActivitySection'
 import CardDescriptionMdEditor from './CardDescriptionMdEditor'
 import CardUserGroup from './CardUserGroup'
 import { selectCurrentUser } from '~/redux/user/userSlice'
+import { CARD_MEMBER_ACTIONS } from '~/utils/constants'
 
 const SidebarItem = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -225,7 +226,13 @@ function ActiveCard() {
               {/* neu user dang dang nhap neu chua thuoc member cua card thi cho phep cho user vao card */}
               { activeCard?.memberIds?.includes(currentUser._id)
                 ? null
-                : <SidebarItem className="active">
+                : <SidebarItem
+                  className="active"
+                  onClick={() => onUpdateCardMembers({
+                    userId: currentUser._id,
+                    action: CARD_MEMBER_ACTIONS.ADD
+                  })}
+                >
                   <PersonOutlineOutlinedIcon fontSize="small" />
                   Join
                 </SidebarItem>

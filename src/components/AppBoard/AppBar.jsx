@@ -1,18 +1,13 @@
 // Boards List
 import AppsIcon from '@mui/icons-material/Apps'
-import CloseIcon from '@mui/icons-material/Close'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd'
-import SearchIcon from '@mui/icons-material/Search'
 import { Tooltip } from '@mui/material'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
-import InputAdornment from '@mui/material/InputAdornment'
 import SvgIcon from '@mui/material/SvgIcon'
-import TextField from '@mui/material/TextField'
 import ToolTip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
-import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ReactComponent as TrelloIcon } from '~/assets/trello.svg'
 import ModeSelect from '~/components/ModeSelect/ModeSelect'
@@ -22,9 +17,9 @@ import Starred from './Menus/Starred'
 import Templates from './Menus/Templates'
 import WorkSpaces from './Menus/WorkSpaces'
 import Notifications from './Notifications/Notifications'
+import AutoCompleteSearchBoard from './SearchBoards/AutoCompleteSearchBoard'
 
 function AppBar() {
-  const [searchValue, setSearchValue] = useState('')
   return (
     <Box px={2} sx={{
     // backgroundColor: 'primary.light',
@@ -58,43 +53,8 @@ function AppBar() {
         </Box>
       </Box>
       <Box sx={{ display: 'flex', alignItems:'center', gap:2 }}>
-        <TextField
-          id="outlined-search"
-          label="Search..."
-          type="text"
-          value={searchValue}
-          onChange={(e) => setSearchValue(e.target.value)}
-          size="small"
-          //tac dung de cho thang search no nhay len tren
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon sx={{ color: 'white' }}/>
-              </InputAdornment>
-            ),
-            endAdornment: (
-              <InputAdornment position="end">
-                <CloseIcon sx={{ color: searchValue ? 'white' : 'transparent', cursor:'pointer' }}
-                  onClick={() => setSearchValue('')}
-                  fontSize='small'/>
-              </InputAdornment>
-              //kiem tra searchValue neu co gia tri thi cho mau trang con khong thi trong suot
-            )
-          }}
-          sx={{
-            minWidth: 120,
-            maxWidth: 180,
-            '& label': { color: 'white' },
-            '& label.Mui-focused': { color: 'white' },
-            '& input': { color: 'white' },
-            '& .MuiOutlinedInput-root': {
-              '& fieldset': { borderColor: 'white' },
-              '&:hover fieldset': { borderColor: 'white' },
-              '&.Mui-focused fieldset': { borderColor: 'white' }
-              // KHÔNG set borderWidth ở đây!
-            }
-          }}
-        />
+        {/* tim kiem nhanh 1 hay nhieu board, asynchronous de vua search vua goi api de suggest ten board theo input user nhap vao*/}
+        <AutoCompleteSearchBoard/>
         {/* dark light system mode */}
         <ModeSelect sx={{ minWidth: 120 }} />
         {/* xu ly hien thi cac thong bao */}

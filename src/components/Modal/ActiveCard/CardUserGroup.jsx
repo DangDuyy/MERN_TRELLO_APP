@@ -6,7 +6,7 @@ import Box from '@mui/material/Box'
 import Popover from '@mui/material/Popover'
 import Tooltip from '@mui/material/Tooltip'
 import { useState } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { selectCurrentActiveBoard } from '~/redux/activeBoard/activeBoardSlice'
 import { CARD_MEMBER_ACTIONS } from '~/utils/constants'
 

@@ -39,7 +39,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
               confirmationButtonProps: { color: 'secondary', variant: 'outlined' },
               cancellationButtonProps: { color: 'inherit' }
             }}>
-            <GlobalStyles styles={{ a: { textDecoration: 'none' }}} />
+            <GlobalStyles styles={{ a: { textDecoration: 'none' } } } />
             <CssBaseline />
             <App />
             <ToastContainer position="bottom-left" theme="colored"/>
