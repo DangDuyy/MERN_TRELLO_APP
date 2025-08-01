@@ -34,10 +34,7 @@ function Notifications() {
   }
 
   const updateBoardInvitation = (status, invitationId) => {
-    dispatch(updateBoardInvitationAPI({ invitationId, status })).then((res) => {
-      // eslint-disable-next-line no-console
-      toast.error(res)
-    })
+    dispatch(updateBoardInvitationAPI({ invitationId, status }))
   }
 
   //lay du lieu notifications tu redux/store
@@ -124,7 +121,7 @@ function Notifications() {
                     <Chip icon={<DoneIcon />} label="Accepted" color="success" size="small" />
                   }
                   {notification.boardInvitation.status === BOARD_INVITATION_STATUS.REJECTED &&
-                    <Chip icon={<NotInterestedIcon />} label="Rejected" color="danger" size="small" />
+                    <Chip icon={<NotInterestedIcon />} label="Rejected" color="warning" size="small" />
                   }
                 </Box>
 

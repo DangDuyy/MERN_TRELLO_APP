@@ -17,8 +17,8 @@ export const fetchInvitationsAPI = createAsyncThunk(
 
 export const updateBoardInvitationAPI = createAsyncThunk(
   'notifications/updateBoardInvitationAPI',
-  async (invitationId, status) => {
-    const response = await authorizeAxiosInstance.post(`${API_ROOT}/v1/invitations/board/${invitationId}`, status)
+  async ({ invitationId, status }) => {
+    const response = await authorizeAxiosInstance.put(`${API_ROOT}/v1/invitations/board/${invitationId}`, { status })
     return response.data
   }
 )
@@ -39,6 +39,9 @@ export const notificationsSlice = createSlice({
     addNotification: (state, action) => {
       const incomingInvitation = action.payload
       //unshift: giong push nhung last in first out (vao sau duoc day len truoc)
+      if (!state.currentNotifications) {
+        state.currentNotifications = []
+      }
       state.currentNotifications.unshift(incomingInvitation)
     }
   },
