@@ -84,11 +84,11 @@ authorizeAxiosInstance.interceptors.response.use((response) => {
   // Ưu tiên backend message trước
   if (error.response?.data?.message) {
     errorMessage = error.response.data.message
-  } 
+  }
   // Nếu không có message, dùng error field
   else if (error.response?.data?.error) {
     errorMessage = error.response.data.error
-  } 
+  }
   // Cuối cùng mới dùng generic message theo status code
   else if (error.response?.status) {
     switch (error.response.status) {
