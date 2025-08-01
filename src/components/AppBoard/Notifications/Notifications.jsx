@@ -15,7 +15,7 @@ import moment from 'moment'
 import { useEffect, useState } from 'react' // ✅ Loại bỏ useCallback
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchInvitationsAPI, selectCurrentNotifications, updateBoardInvitationAPI, addNotification } from '~/redux/notifications/notificationsSlice'
-import { socketIoInstance } from '~/main'
+import { socketIoInstance } from '~/socketClient'
 import { selectCurrentUser } from '~/redux/user/userSlice'
 import { useNavigate } from 'react-router-dom'
 
@@ -78,6 +78,7 @@ function Notifications() {
     return () => {
       socketIoInstance.off('BE_USER_INVITED_TO_BOARD')
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser?._id, dispatch])
 
   return (
